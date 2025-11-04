@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        DOCKERHUB_CRED = credentials('dockerhub')
         DOCKERHUB_USER = "chungcr7"
         BACKEND_IMAGE = "${DOCKERHUB_USER}/coffee-backend"
         FRONTEND_IMAGE = "${DOCKERHUB_USER}/coffee-frontend"
@@ -37,7 +38,7 @@ pipeline {
                 sh "docker build -t ${BACKEND_IMAGE}:latest ./baochung_st22a"
                 sh "docker build -t ${FRONTEND_IMAGE}:latest ./coffee-shop-master"
 
-                sh "echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USER --password-stdin"
+                sh "echo $DOCKERHUB_CRED_PSW | docker login -u $DOCKERHUB_CRED_USR --password-stdin"
                 sh "docker push ${BACKEND_IMAGE}:latest"
                 sh "docker push ${FRONTEND_IMAGE}:latest"
             }
