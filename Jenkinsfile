@@ -9,6 +9,12 @@ pipeline {
 
     stages {
 
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/ChungCr7/Nhom_5_cafe-shop_DevOps.git'
+            }
+        }
+
         stage('Build backend') {
             steps {
                 dir('baochung_st22a') {
