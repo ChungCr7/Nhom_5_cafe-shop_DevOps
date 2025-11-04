@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base::layout(~{::section})}">
+
+<head>
+	<meta charset="utf-8">
+	<title>Shop của Bảo Chung</title>
+</head>
+
+<body>
+	<!-- /TOP HEADER -->
+	<section>
+		<!-- Start Slider  -->
+
+		<section id="banner" style="background: #F9F3EC;">
+			<div class="container">
+				<div class="swiper main-swiper swiper-initialized swiper-horizontal swiper-backface-hidden">
+					<div class="swiper-wrapper" id="swiper-wrapper-dcf61391083c682ee" aria-live="polite"
+						style="transition-duration: 0ms; transform: translate3d(-2592px, 0px, 0px);">
+
+						<!-- Slide 1 -->
+						<div class="swiper-slide py-5" role="group" aria-label="1 / 3" style="width: 1296px;">
+							<div class="row banner-content align-items-center">
+								<div class="img-wrapper col-md-5">
+									<img th:src="@{/img/banner-img.png}" class="img-fluid" alt="Banner Image 1">
+								</div>
+								<div class="content-wrapper col-md-7 p-5 mb-5">
+									<div class="secondary-font text-primary text-uppercase mb-4">Save 10 - 20 % off
+									</div>
+									<h2 class="banner-title display-1 fw-normal">Best destination for <span
+											class="text-primary">your pets</span></h2>
+									<a href="/products"
+										class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">
+										shop now
+										<svg width="24" height="24" viewBox="0 0 24 24" class="mb-1">
+											<use xlink:href="#arrow-right"></use>
+										</svg>
+									</a>
+								</div>
+							</div>
+						</div>
+
+						<!-- Slide 2 -->
+						<div class="swiper-slide py-5 swiper-slide-prev" role="group" aria-label="2 / 3"
+							style="width: 1296px;">
+							<div class="row banner-content align-items-center">
+								<div class="img-wrapper col-md-5">
+									<img th:src="@{/img/banner-img3.png}" class="img-fluid" alt="Banner Image 2">
+								</div>
+								<div class="content-wrapper col-md-7 p-5 mb-5">
+									<div class="secondary-font text-primary text-uppercase mb-4">Save 10 - 20 % off
+									</div>
+									<h2 class="banner-title display-1 fw-normal">Best destination for <span
+											class="text-primary">your pets</span></h2>
+									<a href="/products"
+										class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">
+										shop now
+										<svg width="24" height="24" viewBox="0 0 24 24" class="mb-1">
+											<use xlink:href="#arrow-right"></use>
+										</svg>
+									</a>
+								</div>
+							</div>
+						</div>
+
+						<!-- Slide 3 -->
+						<div class="swiper-slide py-5 swiper-slide-active" role="group" aria-label="3 / 3"
+							style="width: 1296px;">
+							<div class="row banner-content align-items-center">
+								<div class="img-wrapper col-md-5">
+									<img th:src="@{/img/banner-img4.png}" class="img-fluid" alt="Banner Image 3">
+								</div>
+								<div class="content-wrapper col-md-7 p-5 mb-5">
+									<div class="secondary-font text-primary text-uppercase mb-4">Save 10 - 20 % off
+									</div>
+									<h2 class="banner-title display-1 fw-normal">Best destination for <span
+											class="text-primary">your pets</span></h2>
+									<a href="/products"
+										class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">
+										shop now
+										<svg width="24" height="24" viewBox="0 0 24 24" class="mb-1">
+											<use xlink:href="#arrow-right"></use>
+										</svg>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Swiper Pagination -->
+					<div
+						class="swiper-pagination mb-5 swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal">
+						<span class="swiper-pagination-bullet" tabindex="0" role="button"
+							aria-label="Go to slide 1"></span>
+						<span class="swiper-pagination-bullet" tabindex="0" role="button"
+							aria-label="Go to slide 2"></span>
+						<span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0"
+							role="button" aria-label="Go to slide 3" aria-current="true"></span>
+					</div>
+
+					<span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- End Slider  -->
+
+		<!--< Start Category Module -->
+
+		<!-- Start Category Baochung Pro Module -->
+		<section id="categories" class="py-5">
+			<div class="container my-5">
+				<div class="row text-center mb-4">
+					<h2 class="display-4 fw-bold">Categories</h2>
+					<p class="text-muted fs-5">Explore our diverse range of categories</p>
+				</div>
+				<div class="row g-4">
+					<!-- Vòng lặp hiển thị danh mục (6 danh mục mỗi hàng) -->
+					<div class="col-md-2 col-sm-4 col-6" th:each="c : ${category}">
+						<!-- Bọc toàn bộ card bằng thẻ <a> -->
+						<a th:href="@{'/products?category=' + ${c.name}}" class="text-decoration-none">
+							<div class="card category-card border-0 shadow-sm text-center">
+								<!-- Category Image -->
+								<div class="card-body p-4">
+									<div class="category-image-container mx-auto mb-3">
+										<img th:src="@{'img/category_img/' + ${c.imageName}}" 
+											 class="img-fluid rounded-circle" 
+											 alt="[[${c.name}]]">
+									</div>
+									<!-- Category Name -->
+									<h5 class="card-title text-dark">
+										[[${c.name}]]
+									</h5>
+								</div>
+							</div>
+						</a>
+					</div>
+					<!-- Kết thúc vòng lặp danh mục -->
+				</div>
+			</div>
+		</section>
+		<!-- End Category Baochung Pro Module -->
+
+		<!-- Start Latest Product Module -->
+		<section id="clothing" class="my-5 overflow-hidden">
+			<div class="container pb-5">
+				<!-- Section Header -->
+				<div class="section-header d-md-flex justify-content-between align-items-center mb-3">
+					<h2 class="display-3 fw-normal">Products</h2>
+					<div>
+						<a href="/products" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">
+							Shop Now
+							<svg width="24" height="24" viewBox="0 0 24 24" class="mb-1">
+								<use xlink:href="#arrow-right"></use>
+							</svg>
+						</a>
+					</div>
+				</div>
+		
+				<!-- Products Grid -->
+				<div class="product-grid">
+					<!-- Vòng lặp Thymeleaf hiển thị tất cả sản phẩm -->
+					<div class="product-item" th:each="p : ${products}">
+						<div class="card position-relative">
+							<!-- Label -->
+							<div class="z-1 position-absolute rounded-3 m-3 px-3 border border-dark-subtle">
+								New
+							</div>
+		
+							<!-- Product Image -->
+							<a th:href="@{'/product/' + ${p.id}}">
+								<img th:src="@{'img/product_img/' + ${p.image}}" class="img-fluid rounded-4" alt="Product Image">
+							</a>
+		
+							<!-- Product Details -->
+							<div class="card-body p-0">
+								<a th:href="@{'/product/' + ${p.id}}">
+									<h3 class="card-title pt-4 m-0">[[${p.title}]]</h3>
+								</a>
+								<div class="card-text">
+									<!-- Rating -->
+									<span class="rating secondary-font">
+										<iconify-icon icon="clarity:star-solid" class="text-primary"></iconify-icon>
+										<iconify-icon icon="clarity:star-solid" class="text-primary"></iconify-icon>
+										<iconify-icon icon="clarity:star-solid" class="text-primary"></iconify-icon>
+										<iconify-icon icon="clarity:star-solid" class="text-primary"></iconify-icon>
+										<iconify-icon icon="clarity:star-solid" class="text-primary"></iconify-icon>
+										5.0
+									</span>
+		
+									<!-- Pricing -->
+									<p class="d-flex align-items-center fw-bold">
+										<span class="me-2 fs-3">[[${p.discountPrice}]]&#8363;</span>
+										<span class="text-decoration-line-through text-primary me-2 fs-6">[[${p.price}]]&#8363;</span>
+										<span class="fs-6 text-cubi text-primary fw-bold">[[${p.discount}]]% off</span>
+									</p>
+								</div>
+		
+								<!-- Actions -->
+								<div class="d-flex flex-wrap mt-3">
+									<th:block th:if="${p.stock > 0}">
+										<th:block th:if="${user == null}">
+											<a href="/signin" class="btn-cart me-3 px-4 pt-3 pb-3">Add To Cart</a>
+										</th:block>
+										<th:block th:unless="${user == null}">
+											<a th:href="@{'/user/addCart?pid=' + ${p.id} + '&uid=' + ${user.id}}" class="btn-cart me-3 px-4 pt-3 pb-3">Add To Cart</a>
+										</th:block>
+									</th:block>
+									<a class="btn-wishlist px-4 pt-3">
+										<iconify-icon icon="fluent:heart-28-filled" class="fs-5"></iconify-icon>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Kết thúc vòng lặp sản phẩm -->
+				</div>
+			</div>
+		</section>
+		
+		<!-- End Latest Product Module -->
+		
+		<section id="banner-2" class="my-3" style="background: #F9F3EC;">
+			<div class="container">
+				<div class="row flex-row-reverse banner-content align-items-center">
+					<div class="img-wrapper col-12 col-md-6">
+						<img th:src="@{/img/banner-img2.png}" class="img-fluid">
+					</div>
+					<div class="content-wrapper col-12 offset-md-1 col-md-5 p-5">
+						<div class="secondary-font text-primary text-uppercase mb-3 fs-4">Upto 40% off</div>
+						<h2 class="banner-title display-1 fw-normal">Clearance sale !!!
+						</h2>
+						<a href="/products" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">
+							shop now
+							<svg width="24" height="24" viewBox="0 0 24 24" class="mb-1">
+								<use xlink:href="#arrow-right"></use>
+							</svg></a>
+					</div>
+
+				</div>
+			</div>
+		</section>
+
+		<section id="latest-blog" class="my-5">
+			<div class="container py-5 my-5">
+				<div class="row mt-5">
+					<div class="section-header d-md-flex justify-content-between align-items-center mb-3">
+						<h2 class="display-3 fw-normal">Latest Blog Post</h2>
+						<div>
+							<a href="#" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">
+								Read all
+								<svg width="24" height="24" viewBox="0 0 24 24" class="mb-1">
+									<use xlink:href="#arrow-right"></use>
+								</svg></a>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4 my-4 my-md-0">
+						<div class="z-1 position-absolute rounded-3 m-2 px-3 pt-1 bg-light">
+							<h3 class="secondary-font text-primary m-0">20</h3>
+							<p class="secondary-font fs-6 m-0">Feb</p>
+
+						</div>
+						<div class="card position-relative">
+							<a href="single-post.html"><img th:src="@{/img/blog1.jpg}" class="img-fluid rounded-4"
+									alt="image">
+							</a>
+							<div class="card-body p-0">
+								<a href="single-post.html">
+									<h3 class="card-title pt-4 pb-3 m-0">10 Reasons to be helpful towards any animals
+									</h3>
+								</a>
+
+								<div class="card-text">
+									<p class="blog-paragraph fs-6">At the core of our practice is the idea that cities
+										are
+										the incubators of
+										our greatest
+										achievements, and the best hope for a sustainable future.</p>
+									<a href="single-post.html" class="blog-read">read more</a>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 my-4 my-md-0">
+						<div class="z-1 position-absolute rounded-3 m-2 px-3 pt-1 bg-light">
+							<h3 class="secondary-font text-primary m-0">21</h3>
+							<p class="secondary-font fs-6 m-0">Feb</p>
+
+						</div>
+						<div class="card position-relative">
+							<a href="single-post.html"><img th:src="@{/img/blog2.jpg}" class="img-fluid rounded-4"
+									alt="image"></a>
+							<div class="card-body p-0">
+								<a href="single-post.html">
+									<h3 class="card-title pt-4 pb-3 m-0">How to know your pet is hungry</h3>
+								</a>
+
+								<div class="card-text">
+									<p class="blog-paragraph fs-6">At the core of our practice is the idea that cities
+										are
+										the incubators of
+										our greatest
+										achievements, and the best hope for a sustainable future.</p>
+									<a href="single-post.html" class="blog-read">read more</a>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 my-4 my-md-0">
+						<div class="z-1 position-absolute rounded-3 m-2 px-3 pt-1 bg-light">
+							<h3 class="secondary-font text-primary m-0">22</h3>
+							<p class="secondary-font fs-6 m-0">Feb</p>
+
+						</div>
+						<div class="card position-relative">
+							<a href="single-post.html"><img th:src="@{/img/blog3.jpg}" class="img-fluid rounded-4"
+									alt="image"></a>
+							<div class="card-body p-0">
+								<a href="single-post.html">
+									<h3 class="card-title pt-4 pb-3 m-0">Best home for your pets</h3>
+								</a>
+
+								<div class="card-text">
+									<p class="blog-paragraph fs-6">At the core of our practice is the idea that cities
+										are
+										the incubators of
+										our greatest
+										achievements, and the best hope for a sustainable future.</p>
+									<a href="single-post.html" class="blog-read">read more</a>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section id="service">
+			<div class="container py-5 my-5">
+				<div class="row g-md-5 pt-4">
+					<div class="col-md-3 my-3">
+						<div class="card">
+							<div>
+								<iconify-icon class="service-icon text-primary" icon="la:shopping-cart"></iconify-icon>
+							</div>
+							<h3 class="card-title py-2 m-0">Free Delivery</h3>
+							<div class="card-text">
+								<p class="blog-paragraph fs-6">Lorem ipsum dolor sit amet, consectetur adipi elit.</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 my-3">
+						<div class="card">
+							<div>
+								<iconify-icon class="service-icon text-primary" icon="la:user-check"></iconify-icon>
+							</div>
+							<h3 class="card-title py-2 m-0">100% secure payment</h3>
+							<div class="card-text">
+								<p class="blog-paragraph fs-6">Lorem ipsum dolor sit amet, consectetur adipi elit.</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 my-3">
+						<div class="card">
+							<div>
+								<iconify-icon class="service-icon text-primary" icon="la:tag"></iconify-icon>
+							</div>
+							<h3 class="card-title py-2 m-0">Daily Offer</h3>
+							<div class="card-text">
+								<p class="blog-paragraph fs-6">Lorem ipsum dolor sit amet, consectetur adipi elit.</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 my-3">
+						<div class="card">
+							<div>
+								<iconify-icon class="service-icon text-primary" icon="la:award"></iconify-icon>
+							</div>
+							<h3 class="card-title py-2 m-0">Quality guarantee</h3>
+							<div class="card-text">
+								<p class="blog-paragraph fs-6">Lorem ipsum dolor sit amet, consectetur adipi elit.</p>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</section>
+
+		<section id="insta" class="my-5">
+			<div class="row g-0 py-5">
+				<div class="col instagram-item  text-center position-relative">
+					<div class="icon-overlay d-flex justify-content-center position-absolute">
+						<iconify-icon class="text-white" icon="la:instagram"></iconify-icon>
+					</div>
+					<a href="#">
+						<img th:src="@{/img/insta1.jpg}" alt="insta-img" class="img-fluid rounded-3">
+					</a>
+				</div>
+				<div class="col instagram-item  text-center position-relative">
+					<div class="icon-overlay d-flex justify-content-center position-absolute">
+						<iconify-icon class="text-white" icon="la:instagram"></iconify-icon>
+					</div>
+					<a href="#">
+						<img th:src="@{/img/insta2.jpg}" alt="insta-img" class="img-fluid rounded-3">
+					</a>
+				</div>
+				<div class="col instagram-item  text-center position-relative">
+					<div class="icon-overlay d-flex justify-content-center position-absolute">
+						<iconify-icon class="text-white" icon="la:instagram"></iconify-icon>
+					</div>
+					<a href="#">
+						<img th:src="@{/img/insta3.jpg}" alt="insta-img" class="img-fluid rounded-3">
+					</a>
+				</div>
+				<div class="col instagram-item  text-center position-relative">
+					<div class="icon-overlay d-flex justify-content-center position-absolute">
+						<iconify-icon class="text-white" icon="la:instagram"></iconify-icon>
+					</div>
+					<a href="#">
+						<img th:src="@{/img/insta4.jpg}" alt="insta-img" class="img-fluid rounded-3">
+					</a>
+				</div>
+				<div class="col instagram-item  text-center position-relative">
+					<div class="icon-overlay d-flex justify-content-center position-absolute">
+						<iconify-icon class="text-white" icon="la:instagram"></iconify-icon>
+					</div>
+					<a href="#">
+						<img th:src="@{/img/insta5.jpg}" alt="insta-img" class="img-fluid rounded-3">
+					</a>
+				</div>
+				<div class="col instagram-item  text-center position-relative">
+					<div class="icon-overlay d-flex justify-content-center position-absolute">
+						<iconify-icon class="text-white" icon="la:instagram"></iconify-icon>
+					</div>
+					<a href="#">
+						<img th:src="@{/img/insta6.jpg}" alt="insta-img" class="img-fluid rounded-3">
+					</a>
+				</div>
+			</div>
+		</section>
+	</section>
+</body>
+
+</html>
