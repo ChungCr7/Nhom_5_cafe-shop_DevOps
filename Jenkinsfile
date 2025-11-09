@@ -32,7 +32,7 @@
 
                         sh "docker build -t ${BACKEND_IMAGE}:latest ./baochung_st22a"
 
-                        sh "docker build --build-arg VITE_API_BASE=${API_BASE}/api -t ${FRONTEND_IMAGE}:latest ./coffee-shop-master\"
+                        sh "docker build --build-arg VITE_API_BASE=${API_BASE}/api -t ${FRONTEND_IMAGE}:latest ./coffee-shop-master"
 
                         sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
 
