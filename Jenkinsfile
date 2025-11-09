@@ -36,6 +36,8 @@ pipeline {
 
         stage('Docker Build & Push') {
             steps {
+                sh "sudo usermod -aG docker jenkins || true"
+
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
 
                     sh "docker build -t ${BACKEND_IMAGE}:latest ./baochung_st22a"
