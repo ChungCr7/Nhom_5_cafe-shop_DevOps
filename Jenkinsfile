@@ -11,7 +11,9 @@ pipeline {
 
         stage('Checkout Source') {
             steps {
-                git branch: 'feature/ci-cd-jenkins', url: 'https://github.com/ChungCr7/Nhom_5_cafe-shop_DevOps.git'
+                git branch: 'feature/ci-cd-jenkins',
+                    url: 'https://github.com/ChungCr7/Nhom_5_cafe-shop_DevOps.git',
+                    credentialsId: 'github_pat'
             }
         }
 
@@ -37,7 +39,6 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
 
                     sh "docker build -t ${BACKEND_IMAGE}:latest ./baochung_st22a"
-
                     sh "docker build --build-arg VITE_API_BASE_URL=http://192.168.1.12:9000 -t ${FRONTEND_IMAGE}:latest ./coffee-shop-master"
 
                     sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
