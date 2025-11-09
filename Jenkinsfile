@@ -9,21 +9,21 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
+        stage('Checkout Source') {
             steps {
-                git branch: 'main', url: 'https://github.com/ChungCr7/Nhom_5_cafe-shop_DevOps.git'
+                git branch: 'feature/ci-cd-jenkins', url: 'https://github.com/ChungCr7/Nhom_5_cafe-shop_DevOps.git'
             }
         }
 
-        stage('Build backend') {
+        stage('Build Backend') {
             steps {
                 dir('baochung_st22a') {
-                    sh 'mvn clean package -DskipTests'
+                    sh './mvnw clean package -DskipTests'
                 }
             }
         }
 
-        stage('Build frontend') {
+        stage('Build Frontend') {
             steps {
                 dir('coffee-shop-master') {
                     sh 'npm install'
@@ -32,7 +32,7 @@ pipeline {
             }
         }
 
-        stage('Docker build & push') {
+        stage('Docker Build & Push') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
 
