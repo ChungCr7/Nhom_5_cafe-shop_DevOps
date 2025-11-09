@@ -1,0 +1,53 @@
+# frontend
+node_modules/
+dist/
+
+# backend
+target/
+
+# common
+*.log
+.env
+
+# SSL Certificates and Keys (NEVER commit these!)
+ssl/
+*.pem
+*.key
+*.crt
+*.p12
+*.jks
+backend-ssl/
+mysql-ssl/
+letsencrypt/
+
+# Credentials and Secrets
+*.secret
+*.password
+credentials/
+secrets/
+
+# Backup files
+*.backup
+*.bak
+*.old
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log.gz
+*.log.*
+
+# Temporary files
+tmp/
+temp/
+*.tmp

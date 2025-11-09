@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content)">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Waggy - Mẫu Website Thương Mại Điện Tử Về Thú Cưng Miễn Phí</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="author" content="">
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+
+	<!-- Bootstrap CSS từ CDN -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+	<!-- Font Awesome CSS từ CDN -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+		integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<!-- Swiper CSS từ CDN -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+	<!-- CSS Cục Bộ -->
+	<link rel="stylesheet" th:href="@{/css/vendor.css}" />
+	<link rel="stylesheet" th:href="@{/css/chung.css}" />
+
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Chilanka&family=Montserrat:wght@300;400;500&display=swap"
+		rel="stylesheet">
+
+
+</head>
+
+<body>
+	
+	<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+		<defs>
+		  <symbol xmlns="http://www.w3.org/2000/svg" id="link" viewBox="0 0 24 24">
+			<path fill="currentColor"
+			  d="M12 19a1 1 0 1 0-1-1a1 1 0 0 0 1 1Zm5 0a1 1 0 1 0-1-1a1 1 0 0 0 1 1Zm0-4a1 1 0 1 0-1-1a1 1 0 0 0 1 1Zm-5 0a1 1 0 1 0-1-1a1 1 0 0 0 1 1Zm7-12h-1V2a1 1 0 0 0-2 0v1H8V2a1 1 0 0 0-2 0v1H5a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3Zm1 17a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-9h16Zm0-11H4V6a1 1 0 0 1 1-1h1v1a1 1 0 0 0 2 0V5h8v1a1 1 0 0 0 2 0V5h1a1 1 0 0 1 1 1ZM7 15a1 1 0 1 0-1-1a1 1 0 0 0 1 1Zm0 4a1 1 0 1 0-1-1a1 1 0 0 0 1 1Z" />
+		  </symbol>
+		  <symbol xmlns="http://www.w3.org/2000/svg" id="arrow-right" viewBox="0 0 24 24">
+			<path fill="currentColor"
+			  d="M17.92 11.62a1 1 0 0 0-.21-.33l-5-5a1 1 0 0 0-1.42 1.42l3.3 3.29H7a1 1 0 0 0 0 2h7.59l-3.3 3.29a1 1 0 0 0 0 1.42a1 1 0 0 0 1.42 0l5-5a1 1 0 0 0 .21-.33a1 1 0 0 0 0-.76Z" />
+		  </symbol>
+		  <symbol xmlns="http://www.w3.org/2000/svg" id="category" viewBox="0 0 24 24">
+			<path fill="currentColor"
+			  d="M19 5.5h-6.28l-.32-1a3 3 0 0 0-2.84-2H5a3 3 0 0 0-3 3v13a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-10a3 3 0 0 0-3-3Zm1 13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-13a1 1 0 0 1 1-1h4.56a1 1 0 0 1 .95.68l.54 1.64a1 1 0 0 0 .95.68h7a1 1 0 0 1 1 1Z" />
+		  </symbol>
+		  <symbol xmlns="http://www.w3.org/2000/svg" id="calendar" viewBox="0 0 24 24">
+			<path fill="currentColor"
+			  d="M19 4h-2V3a1 1 0 0 0-2 0v1H9V3a1 1 0 0 0-2 0v1H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3Zm1 15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7h16Zm0-9H4V7a1 1 0 0 1 1-1h2v1a1 1 0 0 0 2 0V6h6v1a1 1 0 0 0 2 0V6h2a1 1 0 0 1 1 1Z" />
+		  </symbol>
+		  <symbol xmlns="http://www.w3.org/2000/svg" id="heart" viewBox="0 0 24 24">
+			<path fill="currentColor"
+			  d="M20.16 4.61A6.27 6.27 0 0 0 12 4a6.27 6.27 0 0 0-8.16 9.48l7.45 7.45a1 1 0 0 0 1.42 0l7.45-7.45a6.27 6.27 0 0 0 0-8.87Zm-1.41 7.46L12 18.81l-6.75-6.74a4.28 4.28 0 0 1 3-7.3a4.25 4.25 0 0 1 3 1.25a1 1 0 0 0 1.42 0a4.27 4.27 0 0 1 6 6.05Z" />
+		  </symbol>
+		  <symbol xmlns="http://www.w3.org/2000/svg" id="plus" viewBox="0 0 24 24">
+			<path fill="currentColor"
+			  d="M19 11h-6V5a1 1 0 0 0-2 0v6H5a1 1 0 0 0 0 2h6v6a1 1 0 0 0 2 0v-6h6a1 1 0 0 0 0-2Z" />
+		  </symbol>
+		  <symbol xmlns="http://www.w3.org/2000/svg" id="minus" viewBox="0 0 24 24">
+			<path fill="currentColor" d="M19 11H5a1 1 0 0 0 0 2h14a1 1 0 0 0 0-2Z" />
+		  </symbol>
+		  <symbol xmlns="http://www.w3.org/2000/svg" id="cart" viewBox="0 0 24 24">
+			<path fill="currentColor"
+			  d="M8.5 19a1.5 1.5 0 1 0 1.5 1.5A1.5 1.5 0 0 0 8.5 19ZM19 16H7a1 1 0 0 1 0-2h8.491a3.013 3.013 0 0 0 2.885-2.176l1.585-5.55A1 1 0 0 0 19 5H6.74a3.007 3.007 0 0 0-2.82-2H3a1 1 0 0 0 0 2h.921a1.005 1.005 0 0 1 .962.725l.155.545v.005l1.641 5.742A3 3 0 0 0 7 18h12a1 1 0 0 0 0-2Zm-1.326-9l-1.22 4.274a1.005 1.005 0 0 1-.963.726H8.754l-.255-.892L7.326 7ZM16.5 19a1.5 1.5 0 1 0 1.5 1.5a1.5 1.5 0 0 0-1.5-1.5Z" />
+		  </symbol>
+		  <symbol xmlns="http://www.w3.org/2000/svg" id="check" viewBox="0 0 24 24">
+			<path fill="currentColor"
+			  d="M18.71 7.21a1 1 0 0 0-1.42 0l-7.45 7.46l-3.13-3.14A1 1 0 1 0 5.29 13l3.84 3.84a1 1 0 0 0 1.42 0l8.16-8.16a1 1 0 0 0 0-1.47Z" />
+		  </symbol>
+		  <symbol xmlns="http://www.w3.org/2000/svg" id="trash" viewBox="0 0 24 24">
+			<path fill="currentColor"
+			  d="M10 18a1 1 0 0 0 1-1v-6a1 1 0 0 0-2 0v6a1 1 0 0 0 1 1ZM20 6h-4V5a3 3 0 0 0-3-3h-2a3 3 0 0 0-3 3v1H4a1 1 0 0 0 0 2h1v11a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8h1a1 1 0 0 0 0-2ZM10 5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1h-4Zm7 14a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8h10Zm-3-1a1 1 0 0 0 1-1v-6a1 1 0 0 0-2 0v6a1 1 0 0 0 1 1Z" />
+		  </symbol>
+		  <symbol xmlns="http://www.w3.org/2000/svg" id="star-outline" viewBox="0 0 15 15">
+			<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+			  d="M7.5 9.804L5.337 11l.413-2.533L4 6.674l2.418-.37L7.5 4l1.082 2.304l2.418.37l-1.75 1.793L9.663 11L7.5 9.804Z" />
+		  </symbol>
+		  <symbol xmlns="http://www.w3.org/2000/svg" id="star-solid" viewBox="0 0 15 15">
+			<path fill="currentColor"
+			  d="M7.953 3.788a.5.5 0 0 0-.906 0L6.08 5.85l-2.154.33a.5.5 0 0 0-.283.843l1.574 1.613l-.373 2.284a.5.5 0 0 0 .736.518l1.92-1.063l1.921 1.063a.5.5 0 0 0 .736-.519l-.373-2.283l1.574-1.613a.5.5 0 0 0-.283-.844L8.921 5.85l-.968-2.062Z" />
+		  </symbol>
+		  <symbol xmlns="http://www.w3.org/2000/svg" id="search" viewBox="0 0 24 24">
+			<path fill="currentColor"
+			  d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z" />
+		  </symbol>
+		  <symbol xmlns="http://www.w3.org/2000/svg" id="user" viewBox="0 0 24 24">
+			<path fill="currentColor"
+			  d="M15.71 12.71a6 6 0 1 0-7.42 0a10 10 0 0 0-6.22 8.18a1 1 0 0 0 2 .22a8 8 0 0 1 15.9 0a1 1 0 0 0 1 .89h.11a1 1 0 0 0 .88-1.1a10 10 0 0 0-6.25-8.19ZM12 12a4 4 0 1 1 4-4a4 4 0 0 1-4 4Z" />
+		  </symbol>
+		  <symbol xmlns="http://www.w3.org/2000/svg" id="close" viewBox="0 0 15 15">
+			<path fill="currentColor"
+			  d="M7.953 3.788a.5.5 0 0 0-.906 0L6.08 5.85l-2.154.33a.5.5 0 0 0-.283.843l1.574 1.613l-.373 2.284a.5.5 0 0 0 .736.518l1.92-1.063l1.921 1.063a.5.5 0 0 0 .736-.519l-.373-2.283l1.574-1.613a.5.5 0 0 0-.283-.844L8.921 5.85l-.968-2.062Z" />
+		  </symbol>
+	
+		</defs>
+	  </svg>       
+
+	<header>
+		<div class="container py-2">
+			<div class="row">
+				<div class="row py-4 pb-0 pb-sm-4 align-items-center">
+					<div class="col-sm-4 col-lg-3 text-center text-sm-start">
+						<div class="main-logo">
+							<a href="/">
+								<img th:src="@{/img/logo.png}" alt="logo" class="img-fluid">
+							</a>
+						</div>
+					</div>
+					<div class="col-sm-6 offset-sm-2 offset-md-0 col-lg-5 d-none d-lg-block">
+						<form action="/products" method="get">
+							<div class="input-group">
+								<input type="text" class="form-control" name="ch"
+									placeholder="Tìm kiếm hơn 10.000 sản phẩm">
+								<button class="btn btn-light text-dark ms-3 col-md-2">
+									<i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+								</button>
+							</div>
+						</form>
+
+					</div>
+					<div
+						class="col-sm-8 col-lg-4 d-flex justify-content-end gap-5 align-items-center mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
+						<div class="support-box text-end d-none d-xl-block">
+							<span class="fs-6 secondary-font text-muted">Điện Thoại</span>
+							<h5 class="mb-0">0389.217.901</h5>
+						</div>
+						<div class="support-box text-end d-none d-xl-block">
+							<span class="fs-6 secondary-font text-muted">Email</span>
+							<h5 class="mb-0">waggy@gmail.com</h5>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid">
+			<hr class="m-0">
+		</div>
+
+		<!-- Phần Đầu Navbar -->
+		<div class="container ">
+			<nav class="main-menu d-flex navbar navbar-expand-lg">
+				<div class="container-fluid">
+					<!-- Biểu tượng điều hướng -->
+					<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+						data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+						aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+							<th:block th:if="${user==null}">
+								<li class="nav-item"><a class="nav-link active" aria-current="page" href="/"><i
+											class="fa-solid fa-house"></i>
+										Trang Chủ</a></li>
+							</th:block>
+
+							<!-- Tùy chọn điều hướng nếu người dùng đã đăng nhập -->
+							<th:block th:unless="${user==null}">
+								<li class="nav-item" th:if="${user.role=='ROLE_ADMIN'}"><a class="nav-link active"
+										aria-current="page" href="/admin/"><i class="fa-solid fa-house"></i> Trang Chủ</a>
+								</li>
+
+								<li class="nav-item" th:if="${user.role=='ROLE_USER'}"><a class="nav-link active"
+										aria-current="page" href="/"><i class="fa-solid fa-house"></i> Trang Chủ</a></li>
+							</th:block>
+
+							<li class="nav-item"><a class="nav-link active" aria-current="page"
+									href="/products">Sản Phẩm</a>
+							</li>
+
+							<li class="nav-item dropdown"><a class="nav-link active" href="#" role="button"
+									data-bs-toggle="dropdown" aria-expanded="false"> Danh Mục </a>
+								<ul class="dropdown-menu">
+									<li th:each="c:${categorys}"><a class="dropdown-item"
+											th:href="@{'/products?category='+${c.name}}">[[${c.name}]]</a></li>
+								</ul>
+							</li>
+
+						</ul>
+
+						<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+							<th:block th:if="${user==null}">
+								<li class="nav-item"><a class="nav-link active" aria-current="page" href="/signin"><i
+											class="fa-solid fa-right-to-bracket"></i> Đăng nhập</a></li>
+								<li class="nav-item"><a class="nav-link active" aria-current="page"
+										href="/register">Đăng
+										ký</a></li>
+							</th:block>
+
+							<!-- Tùy chọn điều hướng nếu người dùng đã đăng nhập -->
+							<th:block th:if="${user!=null}">
+								<th:block th:if="${user.role=='ROLE_USER'}">
+									<li class="nav-item"><a class="nav-link active" aria-current="page"
+											href="/user/cart"><i class="fa-solid fa-cart-shopping"></i> Giỏ Hàng [
+											[[${countCart}]]
+											]</a></li>
+								</th:block>
+								<li class="nav-item dropdown"><a class="nav-link dropdown-toggle active" href="#"
+										role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i
+											class="fa-solid fa-user"></i>
+										[[${user.name}]]
+									</a>
+									<ul class="dropdown-menu">
+										<li th:if="${user.role=='ROLE_USER'}"><a class="dropdown-item"
+												href="/user/profile">Hồ sơ</a></li>
+
+										<li th:if="${user.role=='ROLE_ADMIN'}"><a class="dropdown-item"
+												href="/admin/profile">Hồ sơ</a></li>
+
+										<li th:if="${user.role=='ROLE_USER'}"><a class="dropdown-item"
+												href="/user/user-orders">Đơn hàng của tôi</a></li>
+										<li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+										<li>
+											<hr class="dropdown-divider">
+										</li>
+									</ul>
+								</li>
+							</th:block>
+						</ul>
+
+					</div>
+				</div>
+			</nav>
+		</div>
+		<!-- Kết thúc Navbar -->
+
+	</header>
+
+	<div th:replace="${content}"></div>
+
+	<!-- Bắt đầu phần Footer -->
+	<footer id="footer" class="my-5">
+		<div class="container py-5 my-5">
+			<div class="row">
+
+				<div class="col-md-3">
+					<div class="footer-menu">
+						<img th:src="@{/img/logo.png}" alt="logo">
+						<p class="blog-paragraph fs-6 mt-3">Đăng ký nhận tin để nhận thông báo ưu đãi.</p>
+						<div class="social-links">
+							<ul class="d-flex list-unstyled gap-2">
+								<li class="social"><a href="#"><i class="fa-brands fa-facebook"></i></a></li>
+								<li class="social"><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
+								<li class="social"><a href="#"><i class="fa-brands fa-pinterest"></i></a></li>
+								<li class="social"><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
+								<li class="social"><a href="#"><i class="fa-brands fa-youtube"></i></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="footer-menu">
+						<h3>Liên Kết Nhanh</h3>
+						<ul class="menu-list list-unstyled">
+							<li class="menu-item"><a href="#" class="nav-link">Trang Chủ</a></li>
+							<li class="menu-item"><a href="#" class="nav-link">Về Chúng Tôi</a></li>
+							<li class="menu-item"><a href="#" class="nav-link">Ưu Đãi</a></li>
+							<li class="menu-item"><a href="#" class="nav-link">Dịch Vụ</a></li>
+							<li class="menu-item"><a href="#" class="nav-link">Liên Hệ</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="footer-menu">
+						<h3>Trung Tâm Trợ Giúp</h5>
+							<ul class="menu-list list-unstyled">
+								<li class="menu-item"><a href="#" class="nav-link">Câu Hỏi Thường Gặp</a></li>
+								<li class="menu-item"><a href="#" class="nav-link">Thanh Toán</a></li>
+								<li class="menu-item"><a href="#" class="nav-link">Trả Hàng & Hoàn Tiền</a></li>
+								<li class="menu-item"><a href="#" class="nav-link">Thanh Toán</a></li>
+								<li class="menu-item"><a href="#" class="nav-link">Thông Tin Vận Chuyển</a></li>
+							</ul>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div>
+						<h3>Bản Tin Của Chúng Tôi</h3>
+						<p class="blog-paragraph fs-6">Đăng ký nhận tin để cập nhật các ưu đãi lớn từ chúng tôi.</p>
+						<div class="search-bar border rounded-pill border-dark-subtle px-2">
+							<form class="text-center d-flex align-items-center" action="" method="">
+								<input type="text" class="form-control border-0 bg-transparent"
+									placeholder="Nhập email của bạn" />
+								<i class="fa-solid fa-paper-plane"></i>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+
+	<div id="footer-bottom">
+		<div class="container">
+			<hr class="m-0">
+			<div class="row mt-3">
+				<div class="col-md-6 copyright">
+					<p class="secondary-font">© 2024 Waggy. Bản quyền thuộc về chúng tôi.</p>
+				</div>
+				<div class="col-md-6 text-md-end">
+					<p class="secondary-font">Web vip pro của <a href="https://www.facebook.com/profile.php?id=61569349595030&mibextid=ZbWKwL"
+							target="_blank" class="text-decoration-underline fw-bold text-black-50">Bảo Chung ST22A</a>.
+						Đang học tại <a href="https://donga.edu.vn/" target="_blank"
+							class="text-decoration-underline fw-bold text-black-50">
+							Đông Á Univerrsity</a>.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Kết thúc Footer -->
+
+		<!-- jQuery: Thư viện JavaScript phổ biến cho việc thao tác DOM, sự kiện và hiệu ứng -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+	<!-- jQuery Validation: Plugin giúp kiểm tra form trên frontend dễ dàng -->
+	<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+
+	<!-- Bootstrap Bundle: Bao gồm Bootstrap JavaScript (Modal, Tooltip, Dropdown, ...) và Popper.js -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+		crossorigin="anonymous"></script>
+
+	<!-- Iconify: Thư viện biểu tượng giúp thêm các icon SVG dễ dàng -->
+	<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
+	<!-- Plugin JavaScript Cục Bộ: Các plugin JavaScript tùy chỉnh dành riêng cho dự án -->
+	<script th:src="@{/js/plugins.js}"></script>
+
+	<!-- Tệp JavaScript Chính: Chứa các mã JS tùy chỉnh của bạn -->
+	<script th:src="@{/js/script.js}"></script>
+
+	<!-- jQuery Cũ: Tương thích cho các tính năng đặc biệt (nếu có) -->
+	<script th:src="@{/js/jquery-1.11.0.min.js}"></script>
+
+	<!-- Swiper CSS: Thư viện CSS cho trình chiếu hình ảnh -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+	<!-- Swiper JS: Thư viện JavaScript cho trình chiếu hình ảnh -->
+	<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+
+</body>
+
+</html>
