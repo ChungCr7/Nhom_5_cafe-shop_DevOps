@@ -28,11 +28,14 @@ pipeline {
 
         stage('Docker Build & Push') {
             steps {
-                sh 'sudo chown jenkins:jenkins /var/run/docker.sock'
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+
                     sh "docker build -t ${BACKEND_IMAGE}:latest ./baochung_st22a"
+
                     sh "docker build --build-arg VITE_API_BASE_URL=http://192.168.1.12:9000 -t ${FRONTEND_IMAGE}:latest ./coffee-shop-master"
+
                     sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
+
                     sh "docker push ${BACKEND_IMAGE}:latest"
                     sh "docker push ${FRONTEND_IMAGE}:latest"
                 }
