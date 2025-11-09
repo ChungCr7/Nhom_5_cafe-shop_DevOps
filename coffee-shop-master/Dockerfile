@@ -9,7 +9,7 @@ ENV VITE_API_BASE=$VITE_API_BASE
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build
+RUN npm run build --mode production
 
 # --- Serve stage ---
 FROM nginx:alpine
