@@ -26,21 +26,13 @@ pipeline {
             }
         }
 
-        stage('Build Frontend') {
-            steps {
-                dir('coffee-shop-master') {
-                    sh 'npm install'
-                    sh 'npm run build'
-                }
-            }
-        }
-
         stage('Docker Build & Push') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
 
                     sh "docker build -t ${BACKEND_IMAGE}:latest ./baochung_st22a"
-                    sh "docker build --build-arg VITE_API_BASE_URL=${API_BASE} -t ${FRONTEND_IMAGE}:latest ./coffee-shop-master"
+
+                    sh \"docker build --build-arg VITE_API_BASE=${API_BASE}/api -t ${FRONTEND_IMAGE}:latest ./coffee-shop-master\"
 
                     sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
 
