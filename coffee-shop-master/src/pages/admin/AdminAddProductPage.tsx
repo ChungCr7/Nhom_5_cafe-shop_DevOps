@@ -34,7 +34,7 @@ export default function AdminAddProductPage() {
       return;
     }
 
-    fetch("http://127.0.0.1:8080/api/admin/categories", {
+    fetch("${import.meta.env.VITE_API_BASE}/api/admin/categories", {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -76,7 +76,7 @@ export default function AdminAddProductPage() {
     if (file) formData.append("file", file);
 
     try {
-      const res = await fetch("http://127.0.0.1:8080/api/admin/products", {
+      const res = await fetch("${import.meta.env.VITE_API_BASE}/api/admin/products", {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,

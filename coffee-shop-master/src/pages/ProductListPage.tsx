@@ -11,7 +11,7 @@ export default function ProductListPage() {
 
   // ✅ Gọi API backend lấy danh sách sản phẩm hoạt động
   useEffect(() => {
-    fetch("http://localhost:8080/api/home/products")
+    fetch("${import.meta.env.VITE_API_BASE}/api/home/products")
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch products");
         return res.json();

@@ -38,8 +38,8 @@ const resolveImageUrl = (img?: string, type: "product" | "category" = "product")
   if (!img) return "/no-image.png";
   if (img.startsWith("http")) return img;
   if (img.includes(`${type}_img/`))
-    return `http://localhost:8080/${img.replace(/^\/+/, "")}`;
-  return `http://localhost:8080/${type}_img/${img}`;
+    return `${import.meta.env.VITE_API_BASE}/${img.replace(/^\/+/, "")}`;
+  return `${import.meta.env.VITE_API_BASE}/${type}_img/${img}`;
 };
 
 // ======================= HOME PAGE =======================
@@ -56,7 +56,7 @@ export default function HomePage() {
     const loadData = async () => {
       try {
         // ===== LẤY DANH MỤC =====
-        const catRes = await fetch("http://localhost:8080/api/home/categories");
+        const catRes = await fetch("${import.meta.env.VITE_API_BASE}/api/home/categories");
         if (!catRes.ok) throw new Error("Không thể tải danh mục");
         const categories: Category[] = await catRes.json();
 
@@ -73,7 +73,7 @@ export default function HomePage() {
         );
 
         // ===== LẤY DANH SÁCH SẢN PHẨM =====
-        const prodRes = await fetch("http://localhost:8080/api/home/products?page=0&size=12");
+        const prodRes = await fetch("${import.meta.env.VITE_API_BASE}/api/home/products?page=0&size=12");
         if (!prodRes.ok) throw new Error("Không thể tải sản phẩm");
         const prodData = await prodRes.json();
         const allProducts: Product[] = prodData.products || prodData;
@@ -84,7 +84,7 @@ export default function HomePage() {
 
         // ===== HOT DRINKS =====
         if (hotCategory) {
-          const res = await fetch(`http://localhost:8080/api/home/category/${hotCategory.id}/products`);
+          const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/home/category/${hotCategory.id}/products`);
           if (res.ok) {
             const data = await res.json();
             setHotDrinks(data);
@@ -93,7 +93,7 @@ export default function HomePage() {
 
         // ===== COLD DRINKS =====
         if (coldCategory) {
-          const res = await fetch(`http://localhost:8080/api/home/category/${coldCategory.id}/products`);
+          const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/home/category/${coldCategory.id}/products`);
           if (res.ok) {
             const data = await res.json();
             setColdDrinks(data);

@@ -42,7 +42,7 @@ export default function AdminDashboardPage() {
         }
 
         // 🔹 Gọi API Dashboard
-        const res = await fetch("http://127.0.0.1:8080/api/admin/dashboard", {
+        const res = await fetch("${import.meta.env.VITE_API_BASE}/api/admin/dashboard", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,

@@ -25,7 +25,7 @@ export default function AdminUsersPage() {
 
   const fetchUsers = async (type: number) => {
     try {
-      const res = await fetch(`http://localhost:8080/api/admin/users?type=${type}`);
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/admin/users?type=${type}`);
       const data = await res.json();
       setUsers(data.users || []);
     } catch {
@@ -36,7 +36,7 @@ export default function AdminUsersPage() {
   // 🔹 Cập nhật trạng thái người dùng
   const updateStatus = async (id: number, status: boolean) => {
     try {
-      const res = await fetch(`http://localhost:8080/api/admin/updateStatus?id=${id}&status=${status}&type=${userType}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/admin/updateStatus?id=${id}&status=${status}&type=${userType}`, {
         method: "PUT",
       });
       if (!res.ok) throw new Error();
@@ -102,7 +102,7 @@ export default function AdminUsersPage() {
                     <td className="border px-3 py-2">{index + 1}</td>
                     <td className="border px-3 py-2">
                       <img
-                        src={`http://localhost:8080/img/profile_img/${u.profileImage}`}
+                        src={`${import.meta.env.VITE_API_BASE}/img/profile_img/${u.profileImage}`}
                         alt="profile"
                         className="w-16 h-16 rounded-full mx-auto border object-cover"
                       />

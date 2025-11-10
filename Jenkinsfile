@@ -5,7 +5,7 @@
             DOCKERHUB_USER = "chungcr7"
             BACKEND_IMAGE = "${DOCKERHUB_USER}/coffee-backend"
             FRONTEND_IMAGE = "${DOCKERHUB_USER}/coffee-frontend"
-            API_BASE = "http://54.252.74.134:9000"
+            API_BASE = "http://15.134.111.154:9000"
         }
 
         stages {

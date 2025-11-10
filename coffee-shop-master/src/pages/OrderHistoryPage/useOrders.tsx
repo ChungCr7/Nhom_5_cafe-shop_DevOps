@@ -13,7 +13,7 @@ export default function useOrders() {
         const tokenData = localStorage.getItem("coffee-shop-auth-user");
         const token = tokenData ? JSON.parse(tokenData).token : null;
 
-        const res = await fetch("http://localhost:8080/api/user/orders", {
+        const res = await fetch("${import.meta.env.VITE_API_BASE}/api/user/orders", {
           headers: {
             "Content-Type": "application/json",
             ...(token && { Authorization: `Bearer ${token}` }),

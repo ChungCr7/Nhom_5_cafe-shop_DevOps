@@ -41,8 +41,8 @@ export default function AdminProductsPage() {
       }
 
       const url = query
-        ? `http://127.0.0.1:8080/api/admin/products?ch=${query}&pageNo=${pageNo}`
-        : `http://127.0.0.1:8080/api/admin/products?pageNo=${pageNo}`;
+        ? `${import.meta.env.VITE_API_BASE}/api/admin/products?ch=${query}&pageNo=${pageNo}`
+        : `${import.meta.env.VITE_API_BASE}/api/admin/products?pageNo=${pageNo}`;
 
       const res = await fetch(url, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
@@ -78,7 +78,7 @@ export default function AdminProductsPage() {
         return;
       }
 
-      const res = await fetch(`http://127.0.0.1:8080/api/admin/products/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/admin/products/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       });
@@ -101,8 +101,8 @@ export default function AdminProductsPage() {
     if (!image) return "/default.jpg";
     // Nếu image đã chứa /product_img/ thì không nối thêm nữa
     return image.startsWith("/product_img/")
-      ? `http://127.0.0.1:8080${image}`
-      : `http://127.0.0.1:8080/product_img/${image}`;
+      ? `${import.meta.env.VITE_API_BASE}${image}`
+      : `${import.meta.env.VITE_API_BASE}/product_img/${image}`;
   };
 
   return (

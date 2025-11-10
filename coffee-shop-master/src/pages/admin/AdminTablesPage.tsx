@@ -37,7 +37,7 @@ export default function AdminTablesPage() {
   const fetchTables = async () => {
     try {
       const token = getToken();
-      const res = await fetch("http://localhost:8080/api/admin/tables", {
+      const res = await fetch("${import.meta.env.VITE_API_BASE}/api/admin/tables", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -54,14 +54,14 @@ export default function AdminTablesPage() {
     const token = getToken();
 
     try {
-      let url = "http://localhost:8080/api/admin/tables";
+      let url = "${import.meta.env.VITE_API_BASE}/api/admin/tables";
       let method = "POST";
       let body: any = { tableName, position, capacity, status };
 
       // ✅ Nếu là cập nhật bàn → gọi endpoint /status
       if (editingId) {
         method = "PUT";
-        url = `http://localhost:8080/api/admin/tables/${editingId}/status?status=${status}`;
+        url = `${import.meta.env.VITE_API_BASE}/api/admin/tables/${editingId}/status?status=${status}`;
         body = null; // PUT /status không cần body
       }
 
@@ -102,7 +102,7 @@ export default function AdminTablesPage() {
     const token = getToken();
 
     try {
-      const res = await fetch(`http://localhost:8080/api/admin/tables/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/admin/tables/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -131,7 +131,7 @@ export default function AdminTablesPage() {
     try {
       console.log(`💰 PUT /api/admin/tables/${id}/status?status=PAID`);
       const res = await fetch(
-        `http://localhost:8080/api/admin/tables/${id}/status?status=PAID`,
+        `${import.meta.env.VITE_API_BASE}/api/admin/tables/${id}/status?status=PAID`,
         {
           method: "PUT",
           headers: {

@@ -28,7 +28,7 @@ const token = getToken();
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:8080/api/user/orders", {
+      const res = await fetch("${import.meta.env.VITE_API_BASE}/api/user/orders", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -51,7 +51,7 @@ const token = getToken();
 
     try {
       setCancelingId(orderId);
-      const res = await fetch(`http://localhost:8080/api/user/orders/${orderId}/cancel`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/user/orders/${orderId}/cancel`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,

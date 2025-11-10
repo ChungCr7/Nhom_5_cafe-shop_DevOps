@@ -27,7 +27,7 @@ export default function OrderCard({ order }: OrderCardProps) {
 
   // ✅ Xử lý ảnh: loại bỏ dấu "/" thừa và nối domain đúng chuẩn
   const imageUrl = product.image
-    ? `http://localhost:8080/${product.image.replace(/^\/+/, "")}`
+    ? `${import.meta.env.VITE_API_BASE}/${product.image.replace(/^\/+/, "")}`
     : "/images/no-image.png";
 
   return (

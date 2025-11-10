@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const refreshUser = async () => {
     if (!token) return;
     try {
-      const res = await axios.get("http://localhost:8080/api/user/me", {
+      const res = await axios.get("${import.meta.env.VITE_API_BASE}/api/user/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const newUser = res.data.user || res.data;

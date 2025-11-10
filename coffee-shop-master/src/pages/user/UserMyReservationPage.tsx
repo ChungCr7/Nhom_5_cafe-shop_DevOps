@@ -16,7 +16,7 @@ export default function UserMyReservationPage() {
     const token = getToken();
     if (!token) return;
 
-    fetch("http://127.0.0.1:8080/api/user/reservations", {
+    fetch("${import.meta.env.VITE_API_BASE}/api/user/reservations", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -35,7 +35,7 @@ export default function UserMyReservationPage() {
 
     try {
       const res = await fetch(
-        `http://127.0.0.1:8080/api/user/reservations/${id}/cancel`,
+        `${import.meta.env.VITE_API_BASE}/api/user/reservations/${id}/cancel`,
         {
           method: "PUT",
           headers: { Authorization: `Bearer ${token}` },

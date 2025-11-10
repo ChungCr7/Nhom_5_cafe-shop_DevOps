@@ -19,7 +19,7 @@ export default function ProductCardBgImage({ coffee }: ProductCardProps) {
   // Dùng localhost (thay vì 127.0.0.1) để tránh lỗi 403
   const imageUrl = coffee.image?.startsWith("http")
     ? coffee.image
-    : `http://localhost:8080/product_img/${coffee.image}`;
+    : `${import.meta.env.VITE_API_BASE}/product_img/${coffee.image}`;
 
   // ✅ Fallback ảnh khi bị lỗi (ảnh không tồn tại)
   const handleImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {

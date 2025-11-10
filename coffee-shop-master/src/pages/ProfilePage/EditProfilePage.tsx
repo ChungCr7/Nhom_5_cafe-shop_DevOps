@@ -27,7 +27,7 @@ export default function EditProfilePage() {
       return;
     }
 
-    fetch("http://localhost:8080/api/user/me", {
+    fetch("${import.meta.env.VITE_API_BASE}/api/user/me", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -66,7 +66,7 @@ export default function EditProfilePage() {
     if (image) formData.append("img", image); // ✅ đúng key backend UserController
 
     try {
-      const res = await fetch("http://localhost:8080/api/user/profile/update", {
+      const res = await fetch("${import.meta.env.VITE_API_BASE}/api/user/profile/update", {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,

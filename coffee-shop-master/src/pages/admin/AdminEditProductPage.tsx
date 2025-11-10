@@ -41,10 +41,10 @@ export default function AdminEditProductPage() {
         if (!token) return navigate("/login");
 
         const [resProd, resCat] = await Promise.all([
-          fetch(`http://127.0.0.1:8080/api/admin/product/${id}`, {
+          fetch(`${import.meta.env.VITE_API_BASE}/api/admin/product/${id}`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch("http://127.0.0.1:8080/api/admin/categories", {
+          fetch("${import.meta.env.VITE_API_BASE}/api/admin/categories", {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -52,7 +52,7 @@ export default function AdminEditProductPage() {
         if (!resProd.ok) throw new Error("Không thể tải sản phẩm!");
         const prodData = await resProd.json();
         setProduct(prodData);
-        setPreview(`http://127.0.0.1:8080${prodData.image}`);
+        setPreview(`${import.meta.env.VITE_API_BASE}${prodData.image}`);
 
         const catData = await resCat.json();
         setCategories(catData.categories || []);
@@ -105,7 +105,7 @@ export default function AdminEditProductPage() {
       formData.append("active", product.active ? "true" : "false");
       if (file) formData.append("file", file);
 
-      const res = await fetch(`http://127.0.0.1:8080/api/admin/products/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/admin/products/${id}`, {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,

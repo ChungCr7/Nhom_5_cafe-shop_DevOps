@@ -20,7 +20,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ cartItem }) => {
     ? product.image.replace(/^\/?product_img\//, "")
     : "default.jpg";
 
-  const imageUrl = `http://127.0.0.1:8080/product_img/${imagePath}`;
+  const imageUrl = `${import.meta.env.VITE_API_BASE}/product_img/${imagePath}`;
 
   // ✅ Fallback ảnh khi lỗi
   const handleImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {

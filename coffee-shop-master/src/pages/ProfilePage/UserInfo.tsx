@@ -11,7 +11,7 @@ const avatarUrl =
   user?.profileImage && user.profileImage.startsWith("http")
     ? user.profileImage
     : user?.profileImage
-    ? `http://localhost:8080/profile_img/${user.profileImage}`
+    ? `${import.meta.env.VITE_API_BASE}/profile_img/${user.profileImage}`
     : "https://cdn-icons-png.flaticon.com/512/847/847969.png";
 
 

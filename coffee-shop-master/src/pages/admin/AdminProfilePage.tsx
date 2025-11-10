@@ -44,8 +44,8 @@ export default function AdminProductsPage() {
       }
 
       const url = query
-        ? `http://127.0.0.1:8080/api/admin/products?ch=${query}&pageNo=${pageNo}`
-        : `http://127.0.0.1:8080/api/admin/products?pageNo=${pageNo}`;
+        ? `${import.meta.env.VITE_API_BASE}/api/admin/products?ch=${query}&pageNo=${pageNo}`
+        : `${import.meta.env.VITE_API_BASE}/api/admin/products?pageNo=${pageNo}`;
 
       const res = await fetch(url, {
         headers: {
@@ -84,7 +84,7 @@ export default function AdminProductsPage() {
         return;
       }
 
-      const res = await fetch(`http://127.0.0.1:8080/api/admin/products/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/admin/products/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -173,7 +173,7 @@ export default function AdminProductsPage() {
                     <td className="border px-3 py-2">{index + 1 + pageNo * 10}</td>
                     <td className="border px-3 py-2">
                       <img
-                        src={`http://127.0.0.1:8080/img/product_img/${p.image}`}
+                        src={`${import.meta.env.VITE_API_BASE}/img/product_img/${p.image}`}
                         alt={p.title}
                         className="w-14 h-14 object-cover rounded-md mx-auto"
                         onError={(e) => (e.currentTarget.src = "/default.jpg")}

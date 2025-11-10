@@ -12,8 +12,8 @@ export default function ProductImage({ product, onClose }: ProductImageProps) {
     if (!product.image) return "/no-image.png";
     if (product.image.startsWith("http")) return product.image;
     if (product.image.includes("product_img/"))
-      return `http://localhost:8080/${product.image.replace(/^\/+/, "")}`;
-    return `http://localhost:8080/product_img/${product.image}`;
+      return `${import.meta.env.VITE_API_BASE}/${product.image.replace(/^\/+/, "")}`;
+    return `${import.meta.env.VITE_API_BASE}/product_img/${product.image}`;
   })();
 
   const handleImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {

@@ -33,7 +33,7 @@ export default function AdminCategoryPage() {
     }
 
     try {
-      const res = await fetch("http://127.0.0.1:8080/api/admin/categories", {
+      const res = await fetch("${import.meta.env.VITE_API_BASE}/api/admin/categories", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -72,7 +72,7 @@ export default function AdminCategoryPage() {
     formData.append("name", name);
 
     try {
-      const res = await fetch("http://127.0.0.1:8080/api/admin/categories", {
+      const res = await fetch("${import.meta.env.VITE_API_BASE}/api/admin/categories", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`, // ✅ Gửi token để xác thực
@@ -104,7 +104,7 @@ export default function AdminCategoryPage() {
     if (!window.confirm("Bạn có chắc muốn xóa danh mục này?")) return;
 
     try {
-      const res = await fetch(`http://127.0.0.1:8080/api/admin/categories/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/admin/categories/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

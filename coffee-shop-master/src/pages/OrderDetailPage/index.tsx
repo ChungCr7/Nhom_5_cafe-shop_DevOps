@@ -28,7 +28,7 @@ export default function OrderDetailPage() {
     if (!id || !token) return;
     const fetchOrderDetail = async () => {
       try {
-        const res = await fetch(`http://localhost:8080/api/user/orders/${id}`, {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/user/orders/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -64,7 +64,7 @@ export default function OrderDetailPage() {
   const imageUrl =
     product?.image?.startsWith("http")
       ? product.image
-      : `http://localhost:8080${product?.image || "/images/no-image.png"}`;
+      : `${import.meta.env.VITE_API_BASE}${product?.image || "/images/no-image.png"}`;
 
   return (
     <div className="p-4 placeholder-neutral-800">

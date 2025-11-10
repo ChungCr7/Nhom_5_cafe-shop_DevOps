@@ -49,7 +49,7 @@ export default function AdminOrdersPage() {
       const token = getToken();
       if (!token) throw new Error("Token không hợp lệ");
 
-      const res = await fetch("http://localhost:8080/api/admin/orders", {
+      const res = await fetch("${import.meta.env.VITE_API_BASE}/api/admin/orders", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -70,7 +70,7 @@ export default function AdminOrdersPage() {
     try {
       const token = getToken();
       const res = await fetch(
-        `http://localhost:8080/api/admin/orders/search?orderId=${search}`,
+        `${import.meta.env.VITE_API_BASE}/api/admin/orders/search?orderId=${search}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (res.ok) {
@@ -108,7 +108,7 @@ export default function AdminOrdersPage() {
       const st = statusMap[status] || 0;
 
       const res = await fetch(
-        `http://localhost:8080/api/admin/update-status?id=${id}&st=${st}`,
+        `${import.meta.env.VITE_API_BASE}/api/admin/update-status?id=${id}&st=${st}`,
         {
           method: "PUT",
           headers: { Authorization: `Bearer ${token}` },
@@ -135,7 +135,7 @@ export default function AdminOrdersPage() {
 
       if (!window.confirm("Bạn có chắc chắn muốn xóa đơn hàng này không?")) return;
 
-      const res = await fetch(`http://localhost:8080/api/admin/orders/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/admin/orders/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

@@ -32,7 +32,7 @@ export default function AdminAddAdminPage() {
     if (img) formData.append("img", img);
 
     try {
-      const res = await fetch("http://localhost:8080/api/admin/add-admin", {
+      const res = await fetch("${import.meta.env.VITE_API_BASE}/api/admin/add-admin", {
         method: "POST",
         body: formData,
       });
