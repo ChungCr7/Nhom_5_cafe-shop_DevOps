@@ -1,112 +1,112 @@
-version: '3.8'
+  version: '3.8'
 
-services:
-  # ===== DATABASE =====
-  mysql:
-    image: mysql:8.0
-    container_name: coffee_mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: cafeshop
-    ports:
-      - "3307:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
+  services:
+    # ===== DATABASE =====
+    mysql:
+      image: mysql:8.0
+      container_name: coffee_mysql
+      restart: always
+      environment:
+        MYSQL_ROOT_PASSWORD: 123456
+        MYSQL_DATABASE: cafeshop
+      ports:
+        - "3307:3306"
+      volumes:
+        - mysql_data:/var/lib/mysql
+      healthcheck:
+        test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+        start_period: 30s
 
-  # ===== BACKEND =====
-  backend:
-    image: chungcr7/coffee-backend:latest
-    container_name: coffee_backend
-    restart: always
-    depends_on:
-      mysql:
-        condition: service_healthy
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/cafeshop?allowPublicKeyRetrieval=true&useSSL=false
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 123456
-    ports:
-      - "9000:8080"
+    # ===== BACKEND =====
+    backend:
+      image: chungcr7/coffee-backend:latest
+      container_name: coffee_backend
+      restart: always
+      depends_on:
+        mysql:
+          condition: service_healthy
+      environment:
+        SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/cafeshop?allowPublicKeyRetrieval=true&useSSL=false
+        SPRING_DATASOURCE_USERNAME: root
+        SPRING_DATASOURCE_PASSWORD: 123456
+      ports:
+        - "9000:8080"
 
-  # ===== FRONTEND =====
-  frontend:
-    image: chungcr7/coffee-frontend:latest
-    container_name: coffee_frontend
-    restart: always
-    depends_on:
-      - backend
-    ports:
-      - "9001:80"
+    # ===== FRONTEND =====
+    frontend:
+      image: chungcr7/coffee-frontend:latest
+      container_name: coffee_frontend
+      restart: always
+      depends_on:
+        - backend
+      ports:
+        - "9001:80"
 
-  # ===== JENKINS =====
-  jenkins:
-    image: jenkins/jenkins:lts-jdk17
-    container_name: coffee_jenkins
-    user: root
-    privileged: true
-    ports:
-      - "8080:8080"
-      - "50000:50000"
-    volumes:
-      - jenkins_home:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /usr/bin/docker:/usr/bin/docker
+    # ===== JENKINS =====
+    jenkins:
+      image: jenkins/jenkins:lts-jdk17
+      container_name: coffee_jenkins
+      user: root
+      privileged: true
+      ports:
+        - "8080:8080"
+        - "50000:50000"
+      volumes:
+        - jenkins_home:/var/jenkins_home
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /usr/bin/docker:/usr/bin/docker
 
-  # ===== PROMETHEUS =====
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: coffee_prometheus
-    restart: always
-    volumes:
-      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9095:9090"        # đổi 9090 -> 9095 để tránh trùng và dễ nhớ
-    depends_on:
-      - backend
-      - cadvisor
-      - node-exporter
+    # ===== PROMETHEUS =====
+    prometheus:
+      image: prom/prometheus:latest
+      container_name: coffee_prometheus
+      restart: always
+      volumes:
+        - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      ports:
+        - "9095:9090"        # đổi 9090 -> 9095 để tránh trùng và dễ nhớ
+      depends_on:
+        - backend
+        - cadvisor
+        - node-exporter
 
-  # ===== GRAFANA =====
-  grafana:
-    image: grafana/grafana:latest
-    container_name: coffee_grafana
-    restart: always
-    ports:
-      - "3050:3000"        # đổi 3000 -> 3050
-    volumes:
-      - grafana_data:/var/lib/grafana
-    depends_on:
-      - prometheus
+    # ===== GRAFANA =====
+    grafana:
+      image: grafana/grafana:latest
+      container_name: coffee_grafana
+      restart: always
+      ports:
+        - "3050:3000"        # đổi 3000 -> 3050
+      volumes:
+        - grafana_data:/var/lib/grafana
+      depends_on:
+        - prometheus
 
-  # ===== NODE EXPORTER =====
-  node-exporter:
-    image: prom/node-exporter:latest
-    container_name: coffee_node_exporter
-    restart: always
-    ports:
-      - "9105:9100"        # đổi 9100 -> 9105
+    # ===== NODE EXPORTER =====
+    node-exporter:
+      image: prom/node-exporter:latest
+      container_name: coffee_node_exporter
+      restart: always
+      ports:
+        - "9105:9100"        # đổi 9100 -> 9105
 
-  # ===== CADVISOR =====
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
-    container_name: coffee_cadvisor
-    restart: always
-    ports:
-      - "8085:8080"        # đổi 8081 -> 8085 (vì 8080 đã dùng cho Jenkins)
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
+    # ===== CADVISOR =====
+    cadvisor:
+      image: gcr.io/cadvisor/cadvisor:latest
+      container_name: coffee_cadvisor
+      restart: always
+      ports:
+        - "8085:8080"        # đổi 8081 -> 8085 (vì 8080 đã dùng cho Jenkins)
+      volumes:
+        - /:/rootfs:ro
+        - /var/run:/var/run:ro
+        - /sys:/sys:ro
+        - /var/lib/docker/:/var/lib/docker:ro
 
-volumes:
-  mysql_data:
-  jenkins_home:
-  grafana_data:
+  volumes:
+    mysql_data:
+    jenkins_home:
+    grafana_data:
