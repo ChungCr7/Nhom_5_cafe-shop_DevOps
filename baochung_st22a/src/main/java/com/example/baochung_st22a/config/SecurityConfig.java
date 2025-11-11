@@ -72,7 +72,7 @@ public class SecurityConfig {
         config.setAllowedOriginPatterns(List.of(
                 "http://localhost:5173",
                 "http://127.0.0.1:5173",
-                "http://15.134.111.154:9001"
+                "http://15.134.111.154:9001" // 👈 Cho phép frontend trên EC2
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "X-Requested-With"));
@@ -98,13 +98,14 @@ public class SecurityConfig {
                 // 🟢 PUBLIC API - ai cũng truy cập được
                 .requestMatchers(
                     "/api/home/**",
-                    "/api/public/**",     // 👈 Quan trọng: Mở toàn bộ public API (vd: /api/public/tables/available)
+                    "/api/public/**",
                     "/product_img/**",
                     "/category_img/**",
                     "/uploads/**",
                     "/profile_img/**",
                     "/swagger-ui/**",
-                    "/v3/api-docs/**"
+                    "/v3/api-docs/**",
+                    "/actuator/**"     // 👈 Thêm dòng này để Prometheus có thể truy cập
                 ).permitAll()
 
                 // 🟡 USER API - cần đăng nhập (ROLE_USER hoặc ROLE_ADMIN)
@@ -128,7 +129,7 @@ public class SecurityConfig {
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-        // ✅ Cho phép iframe (vd: H2 console)
+        // ✅ Cho phép hiển thị H2 console (hoặc iframe nếu cần)
         http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
