@@ -22,12 +22,12 @@ interface Order {
   };
 }
 
+const API_BASE = import.meta.env.VITE_API_BASE;
+
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [search, setSearch] = useState("");
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(
-    null
-  );
+  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   // ✅ Lấy token đăng nhập admin
   const getToken = () => {
@@ -49,7 +49,7 @@ export default function AdminOrdersPage() {
       const token = getToken();
       if (!token) throw new Error("Token không hợp lệ");
 
-      const res = await fetch("http://localhost:8080/api/admin/orders", {
+      const res = await fetch(`${API_BASE}/api/admin/orders`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -69,10 +69,9 @@ export default function AdminOrdersPage() {
     if (!search.trim()) return fetchOrders();
     try {
       const token = getToken();
-      const res = await fetch(
-        `http://localhost:8080/api/admin/orders/search?orderId=${search}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await fetch(`${API_BASE}/api/admin/orders/search?orderId=${search}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (res.ok) {
         const data = await res.json();
         setOrders(data ? [data] : []);
@@ -107,13 +106,10 @@ export default function AdminOrdersPage() {
       };
       const st = statusMap[status] || 0;
 
-      const res = await fetch(
-        `http://localhost:8080/api/admin/update-status?id=${id}&st=${st}`,
-        {
-          method: "PUT",
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await fetch(`${API_BASE}/api/admin/update-status?id=${id}&st=${st}`, {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (!res.ok) {
         const errText = await res.text();
@@ -135,7 +131,7 @@ export default function AdminOrdersPage() {
 
       if (!window.confirm("Bạn có chắc chắn muốn xóa đơn hàng này không?")) return;
 
-      const res = await fetch(`http://localhost:8080/api/admin/orders/${id}`, {
+      const res = await fetch(`${API_BASE}/api/admin/orders/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -247,24 +243,14 @@ export default function AdminOrdersPage() {
                     <td className="border px-3 py-2">{formatDate(o.orderDate)}</td>
                     <td className="border px-3 py-2">{o.product?.title || "—"}</td>
 
-                  <td className="border px-3 py-2 text-sm">
-                    {(() => {
-                      const price = o.priceBySize || 0;
-                      const quantity = o.quantity || 0;
-                     const shippingFee = o.shippingFee ?? 0;
-                      const total = o.totalPrice ?? price * quantity + shippingFee;
-
-                      return (
-                        <>
-                           SL: {o.quantity || 0} <br />
-                          Giá: {formatPrice(o.priceBySize)} <br />
-                          Ship: {formatPrice(o.shippingFee)} <br />
-                          <b>Tổng:</b> {formatPrice(o.totalPrice)}
-                        </>
-                      );
-                    })()}
-                  </td>
-
+                    <td className="border px-3 py-2 text-sm">
+                      <>
+                        SL: {o.quantity || 0} <br />
+                        Giá: {formatPrice(o.priceBySize)} <br />
+                        Ship: {formatPrice(o.shippingFee)} <br />
+                        <b>Tổng:</b> {formatPrice(o.totalPrice)}
+                      </>
+                    </td>
 
                     <td className="border px-3 py-2 font-medium">
                       <span

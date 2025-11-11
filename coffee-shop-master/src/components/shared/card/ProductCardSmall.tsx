@@ -20,7 +20,7 @@ export default function ProductCardSmall({ coffee }: ProductCardProps) {
   // ✅ Xử lý URL ảnh đúng chuẩn (backend Spring Boot)
   const imageUrl = coffee.image?.startsWith("http")
     ? coffee.image
-    : `http://localhost:8080/product_img/${coffee.image}`;
+    : `${import.meta.env.VITE_API_BASE}/product_img/${coffee.image}`;
 
   // ✅ Fallback ảnh khi lỗi
   const handleImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {

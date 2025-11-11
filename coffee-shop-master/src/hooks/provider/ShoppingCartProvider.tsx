@@ -6,6 +6,8 @@ interface ShoppingCartProviderProps {
   children: ReactNode;
 }
 
+const API_BASE = import.meta.env.VITE_API_BASE; // ✅ Dùng biến môi trường
+
 const ShoppingCartProvider: React.FC<ShoppingCartProviderProps> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const [deliOption, setDeliOption] = useState<DeliOption>(DeliOption.DELIVER);
@@ -15,7 +17,7 @@ const ShoppingCartProvider: React.FC<ShoppingCartProviderProps> = ({ children })
   const [totalPayment, setTotalPayment] = useState(0);
   const [itemCount, setItemCount] = useState(0);
 
-  // 🧠 Helper: Lấy token & userId từ localStorage (TƯƠNG THÍCH VỚI AuthContext mới)
+  // 🧠 Lấy token & userId từ localStorage
   const getAuth = () => {
     const stored = localStorage.getItem("coffee-shop-auth-user");
     if (!stored) return { token: null, userId: null };
@@ -37,7 +39,7 @@ const ShoppingCartProvider: React.FC<ShoppingCartProviderProps> = ({ children })
     if (!token) return;
 
     try {
-      const res = await fetch("http://localhost:8080/api/user/cart", {
+      const res = await fetch(`${API_BASE}/api/user/cart`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) {
@@ -58,12 +60,12 @@ const ShoppingCartProvider: React.FC<ShoppingCartProviderProps> = ({ children })
     }
   }, [deliOption]);
 
-  // 🧩 Lấy giỏ hàng khi load trang
+  // 🧩 Gọi lại khi load trang
   useEffect(() => {
     fetchCart();
   }, [fetchCart]);
 
-  // 🛒 Thêm sản phẩm vào giỏ
+  // 🛒 Thêm sản phẩm
   const addToCart = async (productId: number, size: string = "medium") => {
     const { token, userId } = getAuth();
     if (!token || !userId) {
@@ -73,7 +75,7 @@ const ShoppingCartProvider: React.FC<ShoppingCartProviderProps> = ({ children })
 
     try {
       const res = await fetch(
-        `http://localhost:8080/api/user/add-cart?pid=${productId}&uid=${userId}&size=${size}`,
+        `${API_BASE}/api/user/add-cart?pid=${productId}&uid=${userId}&size=${size}`,
         {
           method: "POST",
           headers: { Authorization: `Bearer ${token}` },
@@ -91,13 +93,13 @@ const ShoppingCartProvider: React.FC<ShoppingCartProviderProps> = ({ children })
     }
   };
 
-  // 🔁 Cập nhật số lượng (+/-)
+  // 🔁 Cập nhật số lượng (+ / -)
   const updateQuantity = async (symbol: "in" | "de", cartId: number) => {
     const { token } = getAuth();
     if (!token) return;
 
     try {
-      await fetch(`http://localhost:8080/api/user/cart/update?sy=${symbol}&cid=${cartId}`, {
+      await fetch(`${API_BASE}/api/user/cart/update?sy=${symbol}&cid=${cartId}`, {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -107,13 +109,13 @@ const ShoppingCartProvider: React.FC<ShoppingCartProviderProps> = ({ children })
     }
   };
 
-  // ❌ Xoá sản phẩm khỏi giỏ
+  // ❌ Xoá sản phẩm
   const removeFromCart = async (cartId: number) => {
     const { token } = getAuth();
     if (!token) return;
 
     try {
-      await fetch(`http://localhost:8080/api/user/cart/delete?cid=${cartId}`, {
+      await fetch(`${API_BASE}/api/user/cart/delete?cid=${cartId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -129,7 +131,7 @@ const ShoppingCartProvider: React.FC<ShoppingCartProviderProps> = ({ children })
     if (!token) return;
 
     try {
-      await fetch("http://localhost:8080/api/user/cart/clear", {
+      await fetch(`${API_BASE}/api/user/cart/clear`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

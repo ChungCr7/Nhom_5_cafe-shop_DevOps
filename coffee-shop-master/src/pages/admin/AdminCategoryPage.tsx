@@ -5,6 +5,8 @@ interface Category {
   name: string;
 }
 
+const API = import.meta.env.VITE_API_BASE || "http://localhost:8080";
+
 export default function AdminCategoryPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [name, setName] = useState("");
@@ -20,7 +22,7 @@ export default function AdminCategoryPage() {
     }
   };
 
-  // 🔹 Lấy danh sách danh mục khi load trang
+  // ✅ Tải danh sách danh mục khi load trang
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -33,7 +35,7 @@ export default function AdminCategoryPage() {
     }
 
     try {
-      const res = await fetch("http://127.0.0.1:8080/api/admin/categories", {
+      const res = await fetch(`${API}/api/admin/categories`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -53,7 +55,7 @@ export default function AdminCategoryPage() {
     }
   };
 
-  // 🔹 Thêm danh mục mới
+  // ✅ Thêm danh mục mới
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -72,11 +74,9 @@ export default function AdminCategoryPage() {
     formData.append("name", name);
 
     try {
-      const res = await fetch("http://127.0.0.1:8080/api/admin/categories", {
+      const res = await fetch(`${API}/api/admin/categories`, {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`, // ✅ Gửi token để xác thực
-        },
+        headers: { Authorization: `Bearer ${token}` },
         body: formData,
       });
 
@@ -93,7 +93,7 @@ export default function AdminCategoryPage() {
     }
   };
 
-  // 🔹 Xóa danh mục
+  // ✅ Xóa danh mục
   const handleDelete = async (id: number) => {
     const token = getToken();
     if (!token) {
@@ -104,11 +104,9 @@ export default function AdminCategoryPage() {
     if (!window.confirm("Bạn có chắc muốn xóa danh mục này?")) return;
 
     try {
-      const res = await fetch(`http://127.0.0.1:8080/api/admin/categories/${id}`, {
+      const res = await fetch(`${API}/api/admin/categories/${id}`, {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (res.status === 401) throw new Error("Token hết hạn hoặc chưa đăng nhập!");
@@ -140,7 +138,10 @@ export default function AdminCategoryPage() {
         )}
 
         {/* 🧩 Form thêm danh mục */}
-        <form onSubmit={handleAdd} className="bg-white shadow-md rounded-lg p-5 mb-8 flex gap-4 items-end">
+        <form
+          onSubmit={handleAdd}
+          className="bg-white shadow-md rounded-lg p-5 mb-8 flex gap-4 items-end"
+        >
           <div className="flex-1">
             <label className="block font-medium text-gray-700 mb-1">Tên danh mục</label>
             <input
@@ -187,7 +188,7 @@ export default function AdminCategoryPage() {
                     <td className="border px-4 py-2">
                       <button
                         onClick={() => handleDelete(cat.id)}
-                        className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                        className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition"
                       >
                         Xóa
                       </button>

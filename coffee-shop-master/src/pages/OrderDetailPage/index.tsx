@@ -4,13 +4,15 @@ import PageLoading from "@/components/shared/PageLoading";
 import { priceWithSign } from "@/utils/helper";
 import { useEffect, useState } from "react";
 
+const API = import.meta.env.VITE_API_BASE || "http://localhost:8080";
+
 export default function OrderDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [order, setOrder] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Lấy token theo cấu trúc mới của AuthContext
+  // ✅ Lấy token từ localStorage
   const getToken = () => {
     const stored = localStorage.getItem("coffee-shop-auth-user");
     if (!stored) return null;
@@ -24,14 +26,13 @@ export default function OrderDetailPage() {
   };
   const token = getToken();
 
+  // ✅ Lấy chi tiết đơn hàng
   useEffect(() => {
     if (!id || !token) return;
     const fetchOrderDetail = async () => {
       try {
-        const res = await fetch(`http://localhost:8080/api/user/orders/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        const res = await fetch(`${API}/api/user/orders/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error("Không thể tải chi tiết đơn hàng");
         const data = await res.json();
@@ -42,7 +43,6 @@ export default function OrderDetailPage() {
         setLoading(false);
       }
     };
-
     fetchOrderDetail();
   }, [id, token]);
 
@@ -61,10 +61,11 @@ export default function OrderDetailPage() {
     paymentType,
   } = order;
 
+  // ✅ Xử lý ảnh sản phẩm an toàn
   const imageUrl =
     product?.image?.startsWith("http")
       ? product.image
-      : `http://localhost:8080${product?.image || "/images/no-image.png"}`;
+      : `${API}${product?.image || "/images/no-image.png"}`;
 
   return (
     <div className="p-4 placeholder-neutral-800">
@@ -76,9 +77,7 @@ export default function OrderDetailPage() {
             src={imageUrl as string}
             alt={(product?.title ?? "Sản phẩm") as string}
             className="w-24 h-24 object-cover rounded-lg border"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = "/images/no-image.png";
-            }}
+            onError={(e) => ((e.target as HTMLImageElement).src = "/images/no-image.png")}
           />
           <div>
             <h3 className="text-lg font-semibold">{product?.title ?? "Sản phẩm"}</h3>

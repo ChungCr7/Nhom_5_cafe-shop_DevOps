@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { PlusCircle } from "lucide-react";
 
+const API = import.meta.env.VITE_API_BASE || "http://localhost:8080";
+
 export default function AdminAddProductPage() {
   const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
   const [file, setFile] = useState<File | null>(null);
@@ -34,7 +36,7 @@ export default function AdminAddProductPage() {
       return;
     }
 
-    fetch("http://127.0.0.1:8080/api/admin/categories", {
+    fetch(`${API}/api/admin/categories`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -56,10 +58,7 @@ export default function AdminAddProductPage() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
     setFile(selected || null);
-    if (selected) {
-      const url = URL.createObjectURL(selected);
-      setPreview(url);
-    }
+    if (selected) setPreview(URL.createObjectURL(selected));
   };
 
   // 🔹 Gửi form
@@ -76,7 +75,7 @@ export default function AdminAddProductPage() {
     if (file) formData.append("file", file);
 
     try {
-      const res = await fetch("http://127.0.0.1:8080/api/admin/products", {
+      const res = await fetch(`${API}/api/admin/products`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,

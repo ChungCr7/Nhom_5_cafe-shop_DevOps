@@ -11,7 +11,8 @@ type DashboardStats = {
   todayRevenue: number;
 };
 
-const API = "http://localhost:8080";
+const API = import.meta.env.VITE_API_BASE || "http://localhost:8080";
+
 
 function getToken() {
   const raw = localStorage.getItem("coffee-shop-auth-user");

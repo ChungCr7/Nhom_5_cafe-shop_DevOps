@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
+// ✅ Dùng biến môi trường linh hoạt
+const API = import.meta.env.VITE_API_BASE || "http://localhost:8080";
+
 export default function AdminEditCategoryPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -29,7 +32,7 @@ export default function AdminEditCategoryPage() {
       return;
     }
 
-    fetch(`http://127.0.0.1:8080/api/admin/categories/${id}`, {
+    fetch(`${API}/api/admin/categories/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -78,7 +81,7 @@ export default function AdminEditCategoryPage() {
     if (file) formData.append("file", file);
 
     try {
-      const res = await fetch(`http://127.0.0.1:8080/api/admin/categories/${id}`, {
+      const res = await fetch(`${API}/api/admin/categories/${id}`, {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -162,7 +165,7 @@ export default function AdminEditCategoryPage() {
           {form.imageName && !preview && (
             <div className="text-center mt-3">
               <img
-                src={`http://127.0.0.1:8080/img/category_img/${form.imageName}`}
+                src={`${API}/img/category_img/${form.imageName}`}
                 alt="Category"
                 className="w-28 h-28 object-cover mx-auto rounded-lg border"
               />

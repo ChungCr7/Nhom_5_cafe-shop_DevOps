@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "vite --mode development",
+    "build": "vite build --mode production",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -28,7 +28,6 @@
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^9.0.1"
   },
-  "proxy": "http://localhost:8080",
   "devDependencies": {
     "@types/mapbox-gl": "^2.7.19",
     "@types/node": "^20.11.5",

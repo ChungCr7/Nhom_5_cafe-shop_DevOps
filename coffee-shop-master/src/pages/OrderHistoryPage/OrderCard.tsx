@@ -1,7 +1,7 @@
 import { priceWithSign } from "@/utils/helper";
 import { Link } from "react-router-dom";
 
-// ✅ Khai báo đúng kiểu dữ liệu cho sản phẩm trong đơn hàng
+// ✅ Kiểu dữ liệu chuẩn cho sản phẩm trong đơn hàng
 interface ProductInfo {
   id?: number;
   title?: string;
@@ -22,12 +22,14 @@ interface OrderCardProps {
   };
 }
 
+const API = import.meta.env.VITE_API_BASE || "http://localhost:8080";
+
 export default function OrderCard({ order }: OrderCardProps) {
   const product = order.product || {};
 
-  // ✅ Xử lý ảnh: loại bỏ dấu "/" thừa và nối domain đúng chuẩn
+  // ✅ Xử lý ảnh sản phẩm (auto thêm domain từ biến môi trường)
   const imageUrl = product.image
-    ? `http://localhost:8080/${product.image.replace(/^\/+/, "")}`
+    ? `${API}/${product.image.replace(/^\/+/, "")}`
     : "/images/no-image.png";
 
   return (
@@ -61,7 +63,8 @@ export default function OrderCard({ order }: OrderCardProps) {
         </p>
 
         <p className="text-gray-600 text-sm line-clamp-2">
-          {order.quantity}× {product.title || "Sản phẩm"} ({order.size})
+          {order.quantity}× {product.title || "Sản phẩm"}{" "}
+          {order.size && `(${order.size})`}
         </p>
       </div>
     </Link>

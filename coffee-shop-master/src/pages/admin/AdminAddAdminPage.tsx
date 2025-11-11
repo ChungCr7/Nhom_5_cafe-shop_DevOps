@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+const API = import.meta.env.VITE_API_BASE || "http://localhost:8080";
+
 export default function AdminAddAdminPage() {
   const [form, setForm] = useState({
     name: "",
@@ -15,15 +17,17 @@ export default function AdminAddAdminPage() {
   const [img, setImg] = useState<File | null>(null);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
+  // 🔹 Cập nhật giá trị input
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // 🔹 Gửi form lên API
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (form.password !== form.cpassword) {
-      setMessage({ type: "error", text: "Mật khẩu xác nhận không khớp!" });
+      setMessage({ type: "error", text: "❌ Mật khẩu xác nhận không khớp!" });
       return;
     }
 
@@ -32,14 +36,19 @@ export default function AdminAddAdminPage() {
     if (img) formData.append("img", img);
 
     try {
-      const res = await fetch("http://localhost:8080/api/admin/add-admin", {
+      const token = localStorage.getItem("coffee-shop-auth-user")
+        ? JSON.parse(localStorage.getItem("coffee-shop-auth-user")!).token
+        : null;
+
+      const res = await fetch(`${API}/api/admin/add-admin`, {
         method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: formData,
       });
 
       if (!res.ok) throw new Error("Lỗi khi thêm quản trị viên");
 
-      setMessage({ type: "success", text: "Thêm quản trị viên thành công!" });
+      setMessage({ type: "success", text: "✅ Thêm quản trị viên thành công!" });
       setForm({
         name: "",
         mobileNumber: "",
@@ -53,8 +62,8 @@ export default function AdminAddAdminPage() {
       });
       setImg(null);
     } catch (err) {
-      setMessage({ type: "error", text: "Không thể thêm quản trị viên!" });
       console.error(err);
+      setMessage({ type: "error", text: "❌ Không thể thêm quản trị viên!" });
     }
   };
 
@@ -65,19 +74,18 @@ export default function AdminAddAdminPage() {
           Thêm Quản Trị Viên
         </h2>
 
-        {/* Hiển thị thông báo */}
+        {/* 🧾 Thông báo */}
         {message && (
           <div
             className={`mb-4 text-center font-semibold ${
-              message.type === "success"
-                ? "text-green-600"
-                : "text-red-600"
+              message.type === "success" ? "text-green-600" : "text-red-600"
             }`}
           >
             {message.text}
           </div>
         )}
 
+        {/* 📝 Form nhập */}
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid md:grid-cols-2 gap-4">
             <div>
