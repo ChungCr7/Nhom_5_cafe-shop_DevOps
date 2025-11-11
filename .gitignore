@@ -1,13 +1,16 @@
-# frontend
+# Frontend
 node_modules/
 dist/
 
-# backend
+# Backend
 target/
 
-# environment configs
+# Environment configs
 .env
 .env.*
 
-# common
+# Logs
 *.log
+
+# Terraform
+.terraform/
