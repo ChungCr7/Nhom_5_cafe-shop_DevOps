@@ -16,3 +16,5 @@ target/
 .terraform/
 *.tfstate
 *.tfstate.*
+
+terraform-iac1/
