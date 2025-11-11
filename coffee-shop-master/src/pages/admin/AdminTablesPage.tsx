@@ -15,6 +15,8 @@ interface CafeTable {
   totalAmount?: number;
 }
 
+const API = import.meta.env.VITE_API_BASE || "http://localhost:8080";
+
 export default function AdminTablesPage() {
   const [tables, setTables] = useState<CafeTable[]>([]);
   const [tableName, setTableName] = useState("");
@@ -37,7 +39,7 @@ export default function AdminTablesPage() {
   const fetchTables = async () => {
     try {
       const token = getToken();
-      const res = await fetch("${import.meta.env.VITE_API_BASE}/api/admin/tables", {
+      const res = await fetch(`${API}/api/admin/tables`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -54,14 +56,14 @@ export default function AdminTablesPage() {
     const token = getToken();
 
     try {
-      let url = "${import.meta.env.VITE_API_BASE}/api/admin/tables";
+      let url = `${API}/api/admin/tables`;
       let method = "POST";
       let body: any = { tableName, position, capacity, status };
 
       // ✅ Nếu là cập nhật bàn → gọi endpoint /status
       if (editingId) {
         method = "PUT";
-        url = `${import.meta.env.VITE_API_BASE}/api/admin/tables/${editingId}/status?status=${status}`;
+        url = `${API}/api/admin/tables/${editingId}/status?status=${status}`;
         body = null; // PUT /status không cần body
       }
 
@@ -102,7 +104,7 @@ export default function AdminTablesPage() {
     const token = getToken();
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/admin/tables/${id}`, {
+      const res = await fetch(`${API}/api/admin/tables/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -129,17 +131,13 @@ export default function AdminTablesPage() {
     const token = getToken();
 
     try {
-      console.log(`💰 PUT /api/admin/tables/${id}/status?status=PAID`);
-      const res = await fetch(
-        `${import.meta.env.VITE_API_BASE}/api/admin/tables/${id}/status?status=PAID`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch(`${API}/api/admin/tables/${id}/status?status=PAID`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const data = await res.json();
       console.log("✅ Phản hồi thanh toán:", data);

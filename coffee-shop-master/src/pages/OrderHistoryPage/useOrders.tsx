@@ -13,13 +13,16 @@ export default function useOrders() {
         const tokenData = localStorage.getItem("coffee-shop-auth-user");
         const token = tokenData ? JSON.parse(tokenData).token : null;
 
-        const res = await fetch("${import.meta.env.VITE_API_BASE}/api/user/orders", {
+        const API = import.meta.env.VITE_API_BASE || "http://localhost:8080";
+
+        const res = await fetch(`${API}/api/user/orders`, {
           headers: {
             "Content-Type": "application/json",
             ...(token && { Authorization: `Bearer ${token}` }),
           },
-          credentials: "include", // nếu backend dùng allowCredentials=true
+          credentials: "include", // nếu backend có cấu hình allowCredentials=true
         });
+
 
         if (!res.ok) throw new Error("Không thể tải đơn hàng");
         const result = await res.json();

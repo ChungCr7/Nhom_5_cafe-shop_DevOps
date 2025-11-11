@@ -16,6 +16,9 @@ interface Product {
   image: string;
 }
 
+// ✅ Dùng biến môi trường API linh hoạt
+const API = import.meta.env.VITE_API_BASE || "http://localhost:8080";
+
 export default function AdminEditProductPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -27,13 +30,13 @@ export default function AdminEditProductPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Lấy token
+  // ✅ Lấy token từ localStorage
   const getToken = () => {
     const storedUser = localStorage.getItem("coffee-shop-auth-user");
     return storedUser ? JSON.parse(storedUser).token : null;
   };
 
-  // ✅ Tải dữ liệu sản phẩm & danh mục
+  // ✅ Load sản phẩm & danh mục
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -41,10 +44,10 @@ export default function AdminEditProductPage() {
         if (!token) return navigate("/login");
 
         const [resProd, resCat] = await Promise.all([
-          fetch(`${import.meta.env.VITE_API_BASE}/api/admin/product/${id}`, {
+          fetch(`${API}/api/admin/product/${id}`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch("${import.meta.env.VITE_API_BASE}/api/admin/categories", {
+          fetch(`${API}/api/admin/categories`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -52,7 +55,15 @@ export default function AdminEditProductPage() {
         if (!resProd.ok) throw new Error("Không thể tải sản phẩm!");
         const prodData = await resProd.json();
         setProduct(prodData);
-        setPreview(`${import.meta.env.VITE_API_BASE}${prodData.image}`);
+
+        // ✅ Preview ảnh đúng domain backend
+        if (prodData.image) {
+          setPreview(
+            prodData.image.startsWith("http")
+              ? prodData.image
+              : `${API}${prodData.image}`
+          );
+        }
 
         const catData = await resCat.json();
         setCategories(catData.categories || []);
@@ -65,7 +76,7 @@ export default function AdminEditProductPage() {
     loadData();
   }, [id, navigate]);
 
-  // ✅ Cập nhật input
+  // ✅ Cập nhật giá trị input
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -74,7 +85,7 @@ export default function AdminEditProductPage() {
     setProduct({ ...product, [name]: type === "checkbox" ? checked : value });
   };
 
-  // ✅ Chọn ảnh mới
+  // ✅ Xử lý chọn ảnh mới
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
     if (selected) {
@@ -105,7 +116,7 @@ export default function AdminEditProductPage() {
       formData.append("active", product.active ? "true" : "false");
       if (file) formData.append("file", file);
 
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/admin/products/${id}`, {
+      const res = await fetch(`${API}/api/admin/products/${id}`, {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -121,12 +132,13 @@ export default function AdminEditProductPage() {
     }
   };
 
+  // ✅ Loading / Lỗi
   if (loading)
     return <div className="text-center mt-20 text-gray-600">Đang tải dữ liệu...</div>;
   if (!product)
     return <div className="text-center mt-20 text-red-600">Không tìm thấy sản phẩm!</div>;
 
-  // ✅ Giao diện form
+  // ✅ Giao diện form cập nhật
   return (
     <section className="min-h-screen bg-gray-50 py-10 px-5">
       <div className="max-w-3xl mx-auto bg-white shadow-md rounded-xl p-8 border border-gray-200">
@@ -134,10 +146,12 @@ export default function AdminEditProductPage() {
           ✏️ Cập Nhật Sản Phẩm
         </h2>
 
-        {message && <div className="text-center text-blue-600 font-semibold mb-4">{message}</div>}
+        {message && (
+          <div className="text-center text-blue-600 font-semibold mb-4">{message}</div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Tên sản phẩm */}
+          {/* 🔹 Tên sản phẩm */}
           <div>
             <label className="block font-medium mb-1">Tên sản phẩm</label>
             <input
@@ -149,7 +163,7 @@ export default function AdminEditProductPage() {
             />
           </div>
 
-          {/* Mô tả */}
+          {/* 🔹 Mô tả */}
           <div>
             <label className="block font-medium mb-1">Mô tả</label>
             <textarea
@@ -161,7 +175,7 @@ export default function AdminEditProductPage() {
             ></textarea>
           </div>
 
-          {/* Thành phần */}
+          {/* 🔹 Thành phần */}
           <div>
             <label className="block font-medium mb-1">Thành phần</label>
             <textarea
@@ -173,7 +187,7 @@ export default function AdminEditProductPage() {
             ></textarea>
           </div>
 
-          {/* Danh mục */}
+          {/* 🔹 Danh mục */}
           <div>
             <label className="block font-medium mb-1">Danh mục</label>
             <select
@@ -191,41 +205,27 @@ export default function AdminEditProductPage() {
             </select>
           </div>
 
-          {/* Giá theo size */}
+          {/* 🔹 Giá theo size */}
           <div className="grid grid-cols-3 gap-3">
-            <div>
-              <label className="block font-medium mb-1">Giá Size S</label>
-              <input
-                type="number"
-                name="priceSmall"
-                value={product.priceSmall || 0}
-                onChange={handleChange}
-                className="border w-full px-3 py-2 rounded-lg"
-              />
-            </div>
-            <div>
-              <label className="block font-medium mb-1">Giá Size M</label>
-              <input
-                type="number"
-                name="priceMedium"
-                value={product.priceMedium || 0}
-                onChange={handleChange}
-                className="border w-full px-3 py-2 rounded-lg"
-              />
-            </div>
-            <div>
-              <label className="block font-medium mb-1">Giá Size L</label>
-              <input
-                type="number"
-                name="priceLarge"
-                value={product.priceLarge || 0}
-                onChange={handleChange}
-                className="border w-full px-3 py-2 rounded-lg"
-              />
-            </div>
+            {[
+              { name: "priceSmall", label: "Giá Size S" },
+              { name: "priceMedium", label: "Giá Size M" },
+              { name: "priceLarge", label: "Giá Size L" },
+            ].map(({ name, label }) => (
+              <div key={name}>
+                <label className="block font-medium mb-1">{label}</label>
+                <input
+                  type="number"
+                  name={name}
+                  value={(product as any)[name] || 0}
+                  onChange={handleChange}
+                  className="border w-full px-3 py-2 rounded-lg"
+                />
+              </div>
+            ))}
           </div>
 
-          {/* Giảm giá */}
+          {/* 🔹 Giảm giá */}
           <div>
             <label className="block font-medium mb-1">Giảm giá (%)</label>
             <input
@@ -237,7 +237,7 @@ export default function AdminEditProductPage() {
             />
           </div>
 
-          {/* Trạng thái */}
+          {/* 🔹 Trạng thái */}
           <div>
             <label className="block font-medium mb-1">Trạng thái</label>
             <div className="flex gap-4">
@@ -262,7 +262,7 @@ export default function AdminEditProductPage() {
             </div>
           </div>
 
-          {/* Tồn kho & ảnh */}
+          {/* 🔹 Tồn kho & ảnh */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="block font-medium mb-1">Tồn kho</label>
@@ -281,7 +281,7 @@ export default function AdminEditProductPage() {
                   src={preview}
                   alt="preview"
                   className="w-28 h-28 object-cover rounded-md mb-2 border"
-                  onError={(e) => (e.currentTarget.src = "/images/coffee/default.jpg")}
+                  onError={(e) => (e.currentTarget.src = "/images/no-image.png")}
                 />
               )}
               <input

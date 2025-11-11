@@ -19,6 +19,9 @@ interface DashboardStats {
   todayRevenue: number;
 }
 
+// ✅ Dùng biến môi trường linh hoạt cho API backend
+const API = import.meta.env.VITE_API_BASE || "http://localhost:8080";
+
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -31,7 +34,7 @@ export default function AdminDashboardPage() {
       setError(null);
 
       try {
-        // 🔑 Lấy token
+        // 🔑 Lấy token từ localStorage
         const storedUser = localStorage.getItem("coffee-shop-auth-user");
         const token = storedUser ? JSON.parse(storedUser).token : null;
 
@@ -41,8 +44,8 @@ export default function AdminDashboardPage() {
           return navigate("/login");
         }
 
-        // 🔹 Gọi API Dashboard
-        const res = await fetch("${import.meta.env.VITE_API_BASE}/api/admin/dashboard", {
+        // 🔹 Gọi API Dashboard qua backend
+        const res = await fetch(`${API}/api/admin/dashboard`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,

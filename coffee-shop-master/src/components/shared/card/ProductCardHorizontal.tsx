@@ -26,10 +26,10 @@ export default function ProductCardHorizontal({ coffee }: ProductCardProps) {
 
     // Nếu backend trả dạng "product_img/filename.jpg"
     if (coffee.image.includes("product_img/"))
-      return `${import.meta.env.VITE_API_BASE}/${coffee.image.replace(/^\/+/, "")}`;
+  return `${import.meta.env.VITE_API_BASE}/${coffee.image.replace(/^\/+/, "")}`;
 
-    // Nếu backend chỉ trả tên file, thêm prefix đầy đủ
-    return `${import.meta.env.VITE_API_BASE}/product_img/${coffee.image}`;
+  return `${import.meta.env.VITE_API_BASE}/product_img/${coffee.image}`;
+
   })();
 
   // ✅ Fallback khi ảnh lỗi

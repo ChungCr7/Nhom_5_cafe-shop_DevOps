@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { CheckCircle, XCircle, Clock } from "lucide-react";
 
+// ✅ Biến môi trường linh hoạt (dùng cho local & production)
+const API = import.meta.env.VITE_API_BASE || "http://localhost:8080";
+
 export default function UserMyReservationPage() {
   const [reservations, setReservations] = useState<any[]>([]);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
@@ -11,53 +14,60 @@ export default function UserMyReservationPage() {
     return storedUser ? JSON.parse(storedUser).token : null;
   };
 
-  // 🔹 Lấy danh sách bàn đã đặt (GET /api/user/reservations)
+  // 🔹 Gọi API lấy danh sách bàn đã đặt
   useEffect(() => {
-    const token = getToken();
-    if (!token) return;
+    const fetchReservations = async () => {
+      const token = getToken();
+      if (!token) {
+        setMessage({ type: "error", text: "Vui lòng đăng nhập lại!" });
+        return;
+      }
 
-    fetch("${import.meta.env.VITE_API_BASE}/api/user/reservations", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => setReservations(data.reservations || []))
-      .catch(() =>
-        setMessage({ type: "error", text: "Không thể tải danh sách đặt bàn!" })
-      );
+      try {
+        const res = await fetch(`${API}/api/user/reservations`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error || "Không thể tải danh sách đặt bàn!");
+
+        setReservations(data.reservations || []);
+      } catch (err: any) {
+        console.error("❌ Lỗi tải danh sách bàn:", err);
+        setMessage({ type: "error", text: err.message || "Không thể tải danh sách đặt bàn!" });
+      }
+    };
+
+    fetchReservations();
   }, []);
 
-  // 🔹 Hủy đặt bàn (PUT /api/user/reservations/{id}/cancel)
+  // 🔹 Hủy bàn đã đặt
   const handleCancel = async (id: number) => {
     const token = getToken();
-    if (!token) return;
+    if (!token) return setMessage({ type: "error", text: "Vui lòng đăng nhập lại!" });
 
     if (!window.confirm("Bạn có chắc muốn hủy bàn này không?")) return;
 
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_BASE}/api/user/reservations/${id}/cancel`,
-        {
-          method: "PUT",
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await fetch(`${API}/api/user/reservations/${id}/cancel`, {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Không thể hủy bàn!");
-      setMessage({ type: "success", text: data.message || "Đã hủy bàn thành công!" });
-      // Cập nhật danh sách local
-      setReservations(
-        reservations.map((r) =>
-          r.id === id ? { ...r, status: "CANCELED" } : r
-        )
+
+      setMessage({ type: "success", text: data.message || "✅ Đã hủy bàn thành công!" });
+
+      // Cập nhật lại danh sách local (trạng thái bàn)
+      setReservations((prev) =>
+        prev.map((r) => (r.id === id ? { ...r, status: "CANCELED" } : r))
       );
     } catch (err: any) {
-      setMessage({ type: "error", text: err.message });
+      console.error("❌ Lỗi khi hủy bàn:", err);
+      setMessage({ type: "error", text: err.message || "Không thể hủy bàn!" });
     }
   };
-
-  // 🔹 Hoàn tất bàn (chỉ cho admin dùng, user không có quyền)
-  // ⚠️ Gỡ phần này hoặc ẩn trên UI vì UserController không có /complete
-  // Nếu vẫn muốn hiển thị cho ADMIN → di chuyển qua trang AdminReservationPage
 
   return (
     <section className="min-h-screen bg-gray-50 py-10">
@@ -66,6 +76,7 @@ export default function UserMyReservationPage() {
           Danh Sách Bàn Đã Đặt
         </h1>
 
+        {/* 🔹 Thông báo */}
         {message && (
           <div
             className={`text-center mb-5 font-semibold ${
@@ -76,10 +87,9 @@ export default function UserMyReservationPage() {
           </div>
         )}
 
+        {/* 🔹 Nếu chưa có đặt bàn */}
         {reservations.length === 0 ? (
-          <p className="text-center text-gray-500">
-            Bạn chưa có bàn nào được đặt.
-          </p>
+          <p className="text-center text-gray-500">Bạn chưa có bàn nào được đặt.</p>
         ) : (
           <div className="grid md:grid-cols-2 gap-6">
             {reservations.map((r) => (
@@ -90,6 +100,7 @@ export default function UserMyReservationPage() {
                 <h3 className="font-semibold text-lg text-gray-800">
                   Bàn: {r.table?.tableName || "Không rõ"}
                 </h3>
+
                 <p className="text-sm text-gray-600 mt-1">
                   Trạng thái:{" "}
                   <span
@@ -101,16 +112,23 @@ export default function UserMyReservationPage() {
                         : "text-gray-500"
                     }`}
                   >
-                    {r.status}
+                    {r.status === "BOOKED"
+                      ? "Đang đặt"
+                      : r.status === "COMPLETED"
+                      ? "Đã hoàn tất"
+                      : "Đã hủy"}
                   </span>
                 </p>
+
                 <p className="text-sm text-gray-600">
                   Giờ đặt: {new Date(r.timeStart).toLocaleString("vi-VN")}
                 </p>
+
                 <p className="text-sm text-gray-600">
-                  Món đã gọi: {r.productIds || "Không có món"}
+                  Món đã gọi: {r.productIds?.length ? r.productIds.join(", ") : "Không có món"}
                 </p>
 
+                {/* 🔹 Nút hành động */}
                 <div className="flex gap-3 mt-4">
                   {r.status === "BOOKED" && (
                     <button

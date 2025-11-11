@@ -5,33 +5,35 @@ import OrderCard from "./OrderCard";
 import EmptyOrder from "./EmptyOrder";
 import { DeliveryOrder } from "@/types";
 
+const API = import.meta.env.VITE_API_BASE || "http://localhost:8080";
+
 export default function OrderList() {
   const [orders, setOrders] = useState<DeliveryOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [cancelingId, setCancelingId] = useState<number | null>(null);
 
-  // ✅ Lấy token đúng cách từ coffee-shop-auth-user
-const getToken = () => {
-  const storedUser = localStorage.getItem("coffee-shop-auth-user");
-  if (!storedUser) return null;
-  try {
-    return JSON.parse(storedUser).token;
-  } catch {
-    return null;
-  }
-};
-
-const token = getToken();
-
+  // ✅ Lấy token đúng cách
+  const getToken = () => {
+    const storedUser = localStorage.getItem("coffee-shop-auth-user");
+    if (!storedUser) return null;
+    try {
+      return JSON.parse(storedUser).token;
+    } catch {
+      return null;
+    }
+  };
+  const token = getToken();
 
   // ✅ Gọi API lấy danh sách đơn hàng
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      const res = await fetch("${import.meta.env.VITE_API_BASE}/api/user/orders", {
+      const res = await fetch(`${API}/api/user/orders`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          ...(token && { Authorization: `Bearer ${token}` }),
         },
+        credentials: "include", // nếu backend có allowCredentials=true
       });
       if (!res.ok) throw new Error("Lỗi khi tải danh sách đơn hàng");
       const data = await res.json();
@@ -43,31 +45,29 @@ const token = getToken();
     }
   };
 
-  // ✅ Hủy đơn hàng (an toàn kiểu dữ liệu)
+  // ✅ Hủy đơn hàng
   const handleCancelOrder = async (id: string | number) => {
-    const orderId = Number(id); // ép kiểu an toàn
-    const confirmCancel = window.confirm("Bạn có chắc muốn hủy đơn hàng này không?");
-    if (!confirmCancel) return;
+    const orderId = Number(id);
+    if (!window.confirm("Bạn có chắc muốn hủy đơn hàng này không?")) return;
 
     try {
       setCancelingId(orderId);
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/user/orders/${orderId}/cancel`, {
+      const res = await fetch(`${API}/api/user/orders/${orderId}/cancel`, {
         method: "PUT",
         headers: {
-          Authorization: `Bearer ${token}`,
+          ...(token && { Authorization: `Bearer ${token}` }),
         },
       });
 
       const result = await res.json();
-
       if (res.ok) {
         alert(result.message || "Đã hủy đơn hàng thành công!");
-        await fetchOrders(); // Cập nhật lại danh sách
+        await fetchOrders();
       } else {
         alert(result.error || "Không thể hủy đơn hàng!");
       }
     } catch (err) {
-      console.error("❌ Lỗi khi hủy đơn:", err);
+      console.error("❌ Lỗi khi hủy đơn hàng:", err);
       alert("Đã xảy ra lỗi khi hủy đơn hàng!");
     } finally {
       setCancelingId(null);

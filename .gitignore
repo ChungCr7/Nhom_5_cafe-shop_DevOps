@@ -5,6 +5,9 @@ dist/
 # backend
 target/
 
+# environment configs
+.env
+.env.*
+
 # common
 *.log
-

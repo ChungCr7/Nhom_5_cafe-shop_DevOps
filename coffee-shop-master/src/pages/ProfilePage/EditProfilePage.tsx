@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import PageLoading from "@/components/shared/PageLoading";
 
+const API = import.meta.env.VITE_API_BASE || "http://localhost:8080";
+
 export default function EditProfilePage() {
   const { user, token, refreshUser } = useAuth();
   const navigate = useNavigate();
@@ -27,7 +29,7 @@ export default function EditProfilePage() {
       return;
     }
 
-    fetch("${import.meta.env.VITE_API_BASE}/api/user/me", {
+    fetch(`${API}/api/user/me`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -44,7 +46,7 @@ export default function EditProfilePage() {
         });
       })
       .catch((err) => console.error("❌ Lỗi tải thông tin:", err));
-  }, [token]);
+  }, [token, navigate]);
 
   // ✅ Cập nhật giá trị input
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,10 +65,10 @@ export default function EditProfilePage() {
     Object.entries(form).forEach(([key, value]) =>
       formData.append(key, value as string)
     );
-    if (image) formData.append("img", image); // ✅ đúng key backend UserController
+    if (image) formData.append("img", image); // 🟢 key đúng với backend
 
     try {
-      const res = await fetch("${import.meta.env.VITE_API_BASE}/api/user/profile/update", {
+      const res = await fetch(`${API}/api/user/profile/update`, {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -75,13 +77,13 @@ export default function EditProfilePage() {
       const data = await res.json();
       if (res.ok) {
         setMessage("✅ Cập nhật thông tin thành công!");
-        await refreshUser(); // 🟢 cập nhật lại dữ liệu user toàn app
+        await refreshUser();
         setTimeout(() => navigate("/profile"), 1500);
       } else {
-        setMessage("❌ Lỗi: " + (data.error || "Không thể cập nhật."));
+        setMessage("❌ " + (data.error || "Không thể cập nhật."));
       }
     } catch (err) {
-      console.error("Lỗi cập nhật:", err);
+      console.error("❌ Lỗi cập nhật:", err);
       setMessage("❌ Lỗi kết nối máy chủ!");
     } finally {
       setLoading(false);
@@ -158,7 +160,7 @@ export default function EditProfilePage() {
             className="border p-3 rounded-lg w-full"
           />
 
-          {/* Ảnh đại diện */}
+          {/* 🖼️ Ảnh đại diện */}
           <div className="flex flex-col">
             <label className="font-medium text-gray-600 mb-1">
               Ảnh đại diện:

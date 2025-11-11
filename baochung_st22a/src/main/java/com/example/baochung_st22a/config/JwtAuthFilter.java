@@ -33,6 +33,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        // ⚡ Bỏ qua filter cho các endpoint public (frontend không cần token)
+        String path = request.getRequestURI();
+        if (path.startsWith("/api/home/") ||
+            path.startsWith("/product_img/") ||
+            path.startsWith("/category_img/") ||
+            path.startsWith("/uploads/") ||
+            path.startsWith("/profile_img/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String authHeader = request.getHeader("Authorization");
 
         // ⛔ Nếu không có header Bearer thì bỏ qua
@@ -76,4 +87,5 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // ⏩ Tiếp tục filter chain
         filterChain.doFilter(request, response);
     }
+
 }

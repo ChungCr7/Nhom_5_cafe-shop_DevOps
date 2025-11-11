@@ -5,15 +5,16 @@ interface UserInfoProps {
   user: AuthUser;
 }
 
-export default function UserInfo({ user }: UserInfoProps) {
-  // ✅ Xử lý ảnh đại diện đúng theo backend API
-const avatarUrl =
-  user?.profileImage && user.profileImage.startsWith("http")
-    ? user.profileImage
-    : user?.profileImage
-    ? `${import.meta.env.VITE_API_BASE}/profile_img/${user.profileImage}`
-    : "https://cdn-icons-png.flaticon.com/512/847/847969.png";
+const API = import.meta.env.VITE_API_BASE || "http://localhost:8080";
 
+export default function UserInfo({ user }: UserInfoProps) {
+  // ✅ Xử lý ảnh đại diện theo backend API và môi trường build
+  const avatarUrl =
+    user?.profileImage && user.profileImage.startsWith("http")
+      ? user.profileImage
+      : user?.profileImage
+      ? `${API}/profile_img/${user.profileImage}`
+      : "https://cdn-icons-png.flaticon.com/512/847/847969.png";
 
   return (
     <div className="flex flex-col items-center text-center">

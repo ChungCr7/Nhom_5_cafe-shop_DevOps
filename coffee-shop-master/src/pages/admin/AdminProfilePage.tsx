@@ -17,6 +17,9 @@ interface Product {
   active: boolean;
 }
 
+// ✅ Dùng biến môi trường để linh hoạt môi trường deploy
+const API = import.meta.env.VITE_API_BASE || "http://localhost:8080";
+
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
@@ -28,13 +31,13 @@ export default function AdminProductsPage() {
     fetchProducts();
   }, [pageNo]);
 
-  // 🔹 Lấy token từ localStorage
+  // 🔹 Lấy token đăng nhập từ localStorage
   const getToken = () => {
     const storedUser = localStorage.getItem("coffee-shop-auth-user");
     return storedUser ? JSON.parse(storedUser).token : null;
   };
 
-  // ✅ Lấy danh sách sản phẩm
+  // ✅ Gọi API lấy danh sách sản phẩm
   const fetchProducts = async (query: string = "") => {
     try {
       const token = getToken();
@@ -44,8 +47,8 @@ export default function AdminProductsPage() {
       }
 
       const url = query
-        ? `${import.meta.env.VITE_API_BASE}/api/admin/products?ch=${query}&pageNo=${pageNo}`
-        : `${import.meta.env.VITE_API_BASE}/api/admin/products?pageNo=${pageNo}`;
+        ? `${API}/api/admin/products?ch=${query}&pageNo=${pageNo}`
+        : `${API}/api/admin/products?pageNo=${pageNo}`;
 
       const res = await fetch(url, {
         headers: {
@@ -84,7 +87,7 @@ export default function AdminProductsPage() {
         return;
       }
 
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/admin/products/${id}`, {
+      const res = await fetch(`${API}/api/admin/products/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -93,17 +96,26 @@ export default function AdminProductsPage() {
       });
 
       if (!res.ok) throw new Error();
-      setMessage({ type: "success", text: "Đã xóa sản phẩm thành công!" });
+      setMessage({ type: "success", text: "✅ Đã xóa sản phẩm thành công!" });
       fetchProducts();
     } catch {
       setMessage({ type: "error", text: "Không thể xóa sản phẩm!" });
     }
   };
 
-  // ✅ Tính giá sau giảm (frontend hiển thị)
+  // ✅ Tính giá sau khi giảm
   const calcDiscount = (price: number, discount: number) => {
     if (!price) return 0;
     return discount > 0 ? price - (price * discount) / 100 : price;
+  };
+
+  // ✅ Chuẩn hóa URL ảnh
+  const getImageUrl = (image: string) => {
+    if (!image) return "/default.jpg";
+    // Nếu đường dẫn ảnh đã có domain
+    return image.startsWith("http")
+      ? image
+      : `${API}/img/product_img/${image}`;
   };
 
   return (
@@ -113,6 +125,7 @@ export default function AdminProductsPage() {
           Quản Lý Sản Phẩm
         </h2>
 
+        {/* 🔹 Hiển thị thông báo */}
         {message && (
           <div
             className={`text-center font-semibold mb-4 ${
@@ -123,7 +136,7 @@ export default function AdminProductsPage() {
           </div>
         )}
 
-        {/* Form tìm kiếm */}
+        {/* 🔹 Form tìm kiếm */}
         <form onSubmit={handleSearch} className="flex justify-center mb-6 gap-3">
           <input
             type="text"
@@ -140,7 +153,7 @@ export default function AdminProductsPage() {
           </button>
         </form>
 
-        {/* Bảng sản phẩm */}
+        {/* 🔹 Bảng danh sách sản phẩm */}
         <div className="overflow-x-auto bg-white shadow-md rounded-lg p-5">
           <table className="min-w-full border border-gray-200 text-sm">
             <thead className="bg-gray-100 text-gray-700">
@@ -160,6 +173,7 @@ export default function AdminProductsPage() {
                 <th className="border px-3 py-2">Thao Tác</th>
               </tr>
             </thead>
+
             <tbody>
               {products.length === 0 ? (
                 <tr>
@@ -173,7 +187,7 @@ export default function AdminProductsPage() {
                     <td className="border px-3 py-2">{index + 1 + pageNo * 10}</td>
                     <td className="border px-3 py-2">
                       <img
-                        src={`${import.meta.env.VITE_API_BASE}/img/product_img/${p.image}`}
+                        src={getImageUrl(p.image)}
                         alt={p.title}
                         className="w-14 h-14 object-cover rounded-md mx-auto"
                         onError={(e) => (e.currentTarget.src = "/default.jpg")}
@@ -184,7 +198,7 @@ export default function AdminProductsPage() {
                     <td className="border px-3 py-2">{p.type}</td>
                     <td className="border px-3 py-2 text-red-600">{p.discount}%</td>
 
-                    {/* Giá theo size (hiển thị giá sau giảm) */}
+                    {/* 🔸 Hiển thị giá theo size (đã giảm) */}
                     <td className="border px-3 py-2 text-blue-600 font-semibold">
                       {calcDiscount(p.priceSmall, p.discount)?.toLocaleString()}đ
                     </td>
@@ -230,7 +244,7 @@ export default function AdminProductsPage() {
           </table>
         </div>
 
-        {/* Phân trang */}
+        {/* 🔹 Phân trang */}
         {totalPages > 1 && (
           <div className="flex justify-center mt-6 space-x-2">
             <button

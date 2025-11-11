@@ -94,7 +94,7 @@ export default function CheckoutModal({ show, onClose }: CheckoutModalProps) {
       }
 
       // 🚀 Gửi request sang Spring Boot API
-      const res = await fetch("${import.meta.env.VITE_API_BASE}/api/user/save-order", {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/user/save-order`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

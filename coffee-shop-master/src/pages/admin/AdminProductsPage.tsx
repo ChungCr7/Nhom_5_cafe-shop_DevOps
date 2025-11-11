@@ -14,6 +14,9 @@ interface Product {
   priceLarge: number;
 }
 
+// ✅ Dùng biến môi trường linh hoạt
+const API = import.meta.env.VITE_API_BASE || "http://localhost:8080";
+
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
@@ -25,13 +28,13 @@ export default function AdminProductsPage() {
     fetchProducts();
   }, [pageNo]);
 
-  // ✅ Lấy token
+  // ✅ Lấy token đăng nhập
   const getToken = () => {
     const storedUser = localStorage.getItem("coffee-shop-auth-user");
     return storedUser ? JSON.parse(storedUser).token : null;
   };
 
-  // ✅ Lấy danh sách sản phẩm
+  // ✅ Gọi API lấy danh sách sản phẩm
   const fetchProducts = async (query: string = "") => {
     try {
       const token = getToken();
@@ -41,8 +44,8 @@ export default function AdminProductsPage() {
       }
 
       const url = query
-        ? `${import.meta.env.VITE_API_BASE}/api/admin/products?ch=${query}&pageNo=${pageNo}`
-        : `${import.meta.env.VITE_API_BASE}/api/admin/products?pageNo=${pageNo}`;
+        ? `${API}/api/admin/products?ch=${query}&pageNo=${pageNo}`
+        : `${API}/api/admin/products?pageNo=${pageNo}`;
 
       const res = await fetch(url, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
@@ -60,7 +63,7 @@ export default function AdminProductsPage() {
     }
   };
 
-  // 🔍 Tìm kiếm
+  // 🔍 Tìm kiếm sản phẩm
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setPageNo(0);
@@ -78,7 +81,7 @@ export default function AdminProductsPage() {
         return;
       }
 
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/admin/products/${id}`, {
+      const res = await fetch(`${API}/api/admin/products/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       });
@@ -91,18 +94,16 @@ export default function AdminProductsPage() {
     }
   };
 
-  // ✅ Hàm tính giá sau giảm
-  const calcDiscount = (price: number, discount: number) => {
-    return price && discount ? price - (price * discount) / 100 : price;
-  };
+  // ✅ Tính giá sau khi giảm
+  const calcDiscount = (price: number, discount: number) =>
+    price && discount ? price - (price * discount) / 100 : price;
 
-  // ✅ Chuẩn hóa đường dẫn ảnh (fix hiển thị đúng)
+  // ✅ Chuẩn hóa đường dẫn ảnh
   const getImageUrl = (image: string) => {
     if (!image) return "/default.jpg";
-    // Nếu image đã chứa /product_img/ thì không nối thêm nữa
     return image.startsWith("/product_img/")
-      ? `${import.meta.env.VITE_API_BASE}${image}`
-      : `${import.meta.env.VITE_API_BASE}/product_img/${image}`;
+      ? `${API}${image}`
+      : `${API}/product_img/${image}`;
   };
 
   return (
@@ -122,7 +123,7 @@ export default function AdminProductsPage() {
           </div>
         )}
 
-        {/* Form tìm kiếm */}
+        {/* 🔍 Form tìm kiếm */}
         <form onSubmit={handleSearch} className="flex justify-center mb-6 gap-3">
           <input
             type="text"
@@ -139,7 +140,7 @@ export default function AdminProductsPage() {
           </button>
         </form>
 
-        {/* Bảng danh sách */}
+        {/* 📋 Bảng danh sách sản phẩm */}
         <div className="overflow-x-auto bg-white shadow-md rounded-lg p-5">
           <table className="min-w-full border border-gray-200 text-sm">
             <thead className="bg-gray-100 text-gray-700">
@@ -170,7 +171,7 @@ export default function AdminProductsPage() {
                     <td className="border px-2 py-2">{i + 1 + pageNo * 10}</td>
                     <td className="border px-2 py-2">
                       <img
-                        src={getImageUrl(p.image)} // ✅ chuẩn
+                        src={getImageUrl(p.image)}
                         alt={p.title}
                         className="w-14 h-14 object-cover mx-auto rounded-md"
                         onError={(e) => (e.currentTarget.src = "/default.jpg")}
@@ -199,7 +200,7 @@ export default function AdminProductsPage() {
                     <td className="border px-2 py-2 space-x-2">
                       <Link
                         to={`/admin/edit-product/${p.id}`}
-                        className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-indigo-600"
+                        className="bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700"
                       >
                         Sửa
                       </Link>
@@ -216,6 +217,25 @@ export default function AdminProductsPage() {
             </tbody>
           </table>
         </div>
+
+        {/* 🔸 Phân trang */}
+        {totalPages > 1 && (
+          <div className="flex justify-center mt-6 space-x-2">
+            {Array.from({ length: totalPages }, (_, i) => (
+              <button
+                key={i}
+                onClick={() => setPageNo(i)}
+                className={`px-3 py-1 rounded-md border ${
+                  i === pageNo
+                    ? "bg-blue-600 text-white"
+                    : "bg-white text-gray-700 hover:bg-blue-100"
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

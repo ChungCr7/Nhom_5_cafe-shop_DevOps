@@ -13,6 +13,8 @@ interface User {
   isEnable: boolean;
 }
 
+const API = import.meta.env.VITE_API_BASE || "http://localhost:8080";
+
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [userType, setUserType] = useState<number>(1); // 1 = user, 2 = admin
@@ -25,7 +27,15 @@ export default function AdminUsersPage() {
 
   const fetchUsers = async (type: number) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/admin/users?type=${type}`);
+      const token = localStorage.getItem("coffee-shop-auth-user")
+        ? JSON.parse(localStorage.getItem("coffee-shop-auth-user")!).token
+        : null;
+
+      const res = await fetch(`${API}/api/admin/users?type=${type}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+
+      if (!res.ok) throw new Error("Không thể tải danh sách người dùng");
       const data = await res.json();
       setUsers(data.users || []);
     } catch {
@@ -36,11 +46,23 @@ export default function AdminUsersPage() {
   // 🔹 Cập nhật trạng thái người dùng
   const updateStatus = async (id: number, status: boolean) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/admin/updateStatus?id=${id}&status=${status}&type=${userType}`, {
-        method: "PUT",
-      });
+      const token = localStorage.getItem("coffee-shop-auth-user")
+        ? JSON.parse(localStorage.getItem("coffee-shop-auth-user")!).token
+        : null;
+
+      const res = await fetch(
+        `${API}/api/admin/updateStatus?id=${id}&status=${status}&type=${userType}`,
+        {
+          method: "PUT",
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }
+      );
+
       if (!res.ok) throw new Error();
-      setMessage({ type: "success", text: status ? "Đã kích hoạt tài khoản!" : "Đã khóa tài khoản!" });
+      setMessage({
+        type: "success",
+        text: status ? "✅ Đã kích hoạt tài khoản!" : "🔒 Đã khóa tài khoản!",
+      });
       fetchUsers(userType);
     } catch {
       setMessage({ type: "error", text: "Không thể cập nhật trạng thái tài khoản!" });
@@ -102,9 +124,14 @@ export default function AdminUsersPage() {
                     <td className="border px-3 py-2">{index + 1}</td>
                     <td className="border px-3 py-2">
                       <img
-                        src={`${import.meta.env.VITE_API_BASE}/img/profile_img/${u.profileImage}`}
+                        src={
+                          u.profileImage?.startsWith("http")
+                            ? u.profileImage
+                            : `${API}/img/profile_img/${u.profileImage}`
+                        }
                         alt="profile"
                         className="w-16 h-16 rounded-full mx-auto border object-cover"
+                        onError={(e) => ((e.currentTarget.src = "/no-image.png"))}
                       />
                     </td>
                     <td className="border px-3 py-2 font-medium">{u.name}</td>

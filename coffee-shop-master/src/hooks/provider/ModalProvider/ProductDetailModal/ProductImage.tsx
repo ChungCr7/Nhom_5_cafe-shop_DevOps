@@ -7,14 +7,17 @@ interface ProductImageProps {
 }
 
 export default function ProductImage({ product, onClose }: ProductImageProps) {
+  const API_BASE = import.meta.env.VITE_API_BASE; // ✅ Lấy base URL từ env
+
   // ✅ Xử lý URL ảnh từ backend (tự động)
   const imageUrl = (() => {
     if (!product.image) return "/no-image.png";
     if (product.image.startsWith("http")) return product.image;
     if (product.image.includes("product_img/"))
-      return `${import.meta.env.VITE_API_BASE}/${product.image.replace(/^\/+/, "")}`;
-    return `${import.meta.env.VITE_API_BASE}/product_img/${product.image}`;
+      return `${API_BASE}/${product.image.replace(/^\/+/, "")}`;
+    return `${API_BASE}/product_img/${product.image}`;
   })();
+
 
   const handleImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = "/no-image.png";
