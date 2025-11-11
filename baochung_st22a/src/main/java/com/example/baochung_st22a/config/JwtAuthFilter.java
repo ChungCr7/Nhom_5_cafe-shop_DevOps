@@ -39,10 +39,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             path.startsWith("/product_img/") ||
             path.startsWith("/category_img/") ||
             path.startsWith("/uploads/") ||
-            path.startsWith("/profile_img/")) {
+            path.startsWith("/profile_img/") ||
+            path.startsWith("/actuator/")) { // 👈 Thêm dòng này
             filterChain.doFilter(request, response);
             return;
         }
+
 
         String authHeader = request.getHeader("Authorization");
 
